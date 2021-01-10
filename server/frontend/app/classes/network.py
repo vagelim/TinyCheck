@@ -172,8 +172,11 @@ class Network(object):
                 ("network", "ssids"))) + "-" + token
         else:
             self.AP_SSID = random.choice(read_config(("network", "ssids")))
-        self.AP_PASS = "".join(
-            [random.choice(self.random_choice_alphabet) for i in range(8)])
+        if read_config(("network", "password")):
+            self.AP_PASS = read_config(("network", "password"))
+        else:
+            self.AP_PASS = "".join(
+                [random.choice(self.random_choice_alphabet) for i in range(8)])
 
         # Launch hostapd
         if self.write_hostapd_config():
