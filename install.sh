@@ -303,8 +303,7 @@ check_dependencies() {
          "/usr/bin/suricata"
          "/usr/bin/unclutter"
          "/usr/bin/sqlite3"
-         "/usr/bin/pip"
-         "/usr/bin/node")
+         "/usr/bin/pip")
 
    echo -e "\e[39m[+] Checking dependencies...\e[39m"
    for bin in "${bins[@]}"
@@ -316,6 +315,7 @@ check_dependencies() {
            install_package ${bin##*/}
       fi
    done
+   install_package node
    echo -e "\e[39m[+] Install Python packages...\e[39m"
    python3 -m pip install -r "$SCRIPT_PATH/assets/requirements.txt"
 }
