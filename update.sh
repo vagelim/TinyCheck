@@ -37,8 +37,8 @@ elif [ $PWD = "/tmp/tinycheck" ]; then
     python3 -m pip install -r assets/requirements.txt
 
     echo "[+] Building new interfaces..."
-    cd /usr/share/tinycheck/app/frontend/ && npm install && npm run build
-    cd /usr/share/tinycheck/app/backend/ && npm install && npm run build
+    cd /usr/share/tinycheck/app/frontend/ && npm install && npm audit fix && npm run build
+    cd /usr/share/tinycheck/app/backend/ && npm install && npm audit fix && npm run build
 
     echo "[+] Updating current configuration with new values."
     if ! grep -q reboot_option /usr/share/tinycheck/config.yaml; then
