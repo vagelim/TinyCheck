@@ -271,11 +271,10 @@ class ZeekEngine(object):
                         self.files.append(f)
 
         for f in self.files:
-            if f["mime_type"] == "application/x-x509-ca-cert":
+            if f["mime_type"] == "application/x-x509-user-cert":
                 for cert in bl_certs:  # Check for blacklisted certificate.
                     if f["sha1"] == cert[0]:
-                        host = self.resolve(f["ip_dst"])
-                        c["alert_tiggered"] = True
+                        host = self.resolve(f["ip_src"])
                         self.alerts.append({"title": self.template["IOC-07"]["title"].format(cert[1].upper(), host),
                                             "description": self.template["IOC-07"]["description"].format(f["sha1"], host),
                                             "host": host,
