@@ -38,7 +38,7 @@ elif [ $PWD = "/tmp/tinycheck" ]; then
 
     echo "[+] Building new interfaces..."
     cd /usr/share/tinycheck/app/frontend/ && npm install && npm audit fix && npm run build
-    cd /usr/share/tinycheck/app/backend/ && npm install && npm audit fix && npm run build 
+    cd /usr/share/tinycheck/app/backend/ && npm install && npm audit fix && npm run build
 
     echo "[+] Updating current configuration with new values."
     if ! grep -q reboot_option /usr/share/tinycheck/config.yaml; then
