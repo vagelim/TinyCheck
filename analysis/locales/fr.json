@@ -68,6 +68,10 @@
             "title": "Le certificat associé à {} est auto-signé.",
             "description": "L'utilisation de certificats auto-signés est une chose courante pour des infrastructures d'attaque associées à des activités malveillantes. Nous vous recommandons de vérifier le serveur {} qui est associé à ce certificat, en regardant le nom de domaine (le cas échéant), son enregistrement WHOIS, sa date de création, et en vérifiant sa réputation sur Internet."
         },
+        "SSL-04": {
+            "title": "Un certificat contient le nom de domaine {}, catégorisé en tant que {}",
+            "description": "Un des certificats échangés contient le nom de domaine {}. Ce nom de domaine a été explicitement catégorisé en tant que malveillant. Votre appareil est sûrement compromis et doit être investigué plus en détails par une équipe professionnelle."
+        },
         "ADV-01": {
             "title": "Vérifiez les alertes liées au serveur {}",
             "description": "Merci de vérifier la réputation et les alertes liées au serveur {}, ce dernier semble malveillant, ayant engendré {} alertes durant la session de capture."

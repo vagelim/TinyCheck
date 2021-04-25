@@ -34,6 +34,22 @@ class ZeekEngine(object):
         self.active_analysis = get_config(("analysis", "active"))
         self.userlang = get_config(("frontend", "user_lang"))
 
+        # Retreive IOCs.
+        if self.iocs_analysis:
+            self.bl_cidrs = [[IPNetwork(cidr[0]), cidr[1]]
+                             for cidr in get_iocs("cidr")]
+            self.bl_hosts = get_iocs("ip4addr") + get_iocs("ip6addr")
+            self.bl_domains = get_iocs("domain")
+            self.bl_freedns = get_iocs("freedns")
+            self.bl_nameservers = get_iocs("ns")
+            self.bl_tlds = get_iocs("tld")
+
+        # Retreive whitelisted items.
+        if self.whitelist_analysis:
+            self.wl_cidrs = [IPNetwork(cidr) for cidr in get_whitelist("cidr")]
+            self.wl_hosts = get_whitelist("ip4addr") + get_whitelist("ip6addr")
+            self.wl_domains = get_whitelist("domain")
+
         # Load template language
         if not re.match("^[a-z]{2,3}$", self.userlang):
             self.userlang = "en"
@@ -84,21 +100,17 @@ class ZeekEngine(object):
         # Check for whitelisted assets, if any, delete the record.
         if self.whitelist_analysis:
 
-            wl_cidrs = [IPNetwork(cidr) for cidr in get_whitelist("cidr")]
-            wl_hosts = get_whitelist("ip4addr") + get_whitelist("ip6addr")
-            wl_domains = get_whitelist("domain")
-
             for i, c in enumerate(self.conns):
-                if c["ip_dst"] in [ip for ip in wl_hosts]:
+                if c["ip_dst"] in [ip for ip in self.wl_hosts]:
                     self.whitelist.append(self.conns[i])
                     self.conns[i] = False
-                elif c["resolution"] in wl_domains:
+                elif c["resolution"] in self.wl_domains:
                     self.whitelist.append(self.conns[i])
                     self.conns[i] = False
-                elif True in [c["resolution"].endswith("." + dom) for dom in wl_domains]:
+                elif True in [c["resolution"].endswith("." + dom) for dom in self.wl_domains]:
                     self.whitelist.append(self.conns[i])
                     self.conns[i] = False
-                elif True in [IPAddress(c["ip_dst"]) in cidr for cidr in wl_cidrs]:
+                elif True in [IPAddress(c["ip_dst"]) in cidr for cidr in self.wl_cidrs]:
                     self.whitelist.append(self.conns[i])
                     self.conns[i] = False
 
@@ -151,17 +163,9 @@ class ZeekEngine(object):
 
         if self.iocs_analysis:
 
-            bl_cidrs = [[IPNetwork(cidr[0]), cidr[1]]
-                        for cidr in get_iocs("cidr")]
-            bl_hosts = get_iocs("ip4addr") + get_iocs("ip6addr")
-            bl_domains = get_iocs("domain")
-            bl_freedns = get_iocs("freedns")
-            bl_nameservers = get_iocs("ns")
-            bl_tlds = get_iocs("tld")
-
             for c in self.conns:
                 # Check for blacklisted IP address.
-                for host in bl_hosts:
+                for host in self.bl_hosts:
                     if c["ip_dst"] == host[0]:
                         c["alert_tiggered"] = True
                         self.alerts.append({"title": self.template["IOC-01"]["title"].format(c["resolution"], c["ip_dst"], host[1].upper()),
@@ -171,7 +175,7 @@ class ZeekEngine(object):
                                             "id": "IOC-01"})
                         break
                 # Check for blacklisted CIDR.
-                for cidr in bl_cidrs:
+                for cidr in self.bl_cidrs:
                     if IPAddress(c["ip_dst"]) in cidr[0]:
                         c["alert_tiggered"] = True
                         self.alerts.append({"title": self.template["IOC-02"]["title"].format(c["resolution"], cidr[0], cidr[1].upper()),
@@ -180,7 +184,7 @@ class ZeekEngine(object):
                                             "level": "Moderate",
                                             "id": "IOC-02"})
                 # Check for blacklisted domain.
-                for domain in bl_domains:
+                for domain in self.bl_domains:
                     if c["resolution"].endswith(domain[0]):
                         if domain[1] != "tracker":
                             c["alert_tiggered"] = True
@@ -197,7 +201,7 @@ class ZeekEngine(object):
                                                 "level": "Moderate",
                                                 "id": "IOC-04"})
                 # Check for blacklisted FreeDNS.
-                for domain in bl_freedns:
+                for domain in self.bl_freedns:
                     if c["resolution"].endswith("." + domain[0]):
                         c["alert_tiggered"] = True
                         self.alerts.append({"title": self.template["IOC-05"]["title"].format(c["resolution"]),
@@ -207,7 +211,7 @@ class ZeekEngine(object):
                                             "id": "IOC-05"})
 
                 # Check for suspect tlds.
-                for tld in bl_tlds:
+                for tld in self.bl_tlds:
                     if c["resolution"].endswith(tld[0]):
                         c["alert_tiggered"] = True
                         self.alerts.append({"title": self.template["IOC-06"]["title"].format(c["resolution"]),
@@ -220,7 +224,7 @@ class ZeekEngine(object):
                 try:  # Domain nameservers check.
                     name_servers = pydig.query(c["resolution"], "NS")
                     if len(name_servers):
-                        for ns in bl_nameservers:
+                        for ns in self.bl_nameservers:
                             if name_servers[0].endswith(".{}.".format(ns[0])):
                                 c["alert_tiggered"] = True
                                 self.alerts.append({"title": self.template["ACT-01"]["title"].format(c["resolution"], name_servers[0]),
@@ -287,6 +291,7 @@ class ZeekEngine(object):
                 * SSL connections which doesn't use the 443.
                 * "Free" certificate issuer (taken from the config).
                 * Self-signed certificates.
+                * Blacklisted domain in the CN
             :return: nothing - all stuff appended to self.alerts
         """
         ssl_default_ports = get_config(("analysis", "ssl_default_ports"))
@@ -297,8 +302,9 @@ class ZeekEngine(object):
                 if record is not None:
                     c = {"host": record['id.resp_h'],
                          "port": record['id.resp_p'],
-                         "issuer": record["issuer"],
-                         "validation_status": record["validation_status"]}
+                         "issuer": record["issuer"] if "issuer" in record else "",
+                         "validation_status": record["validation_status"],
+                         "cn": record["server_name"] if "server_name" in record else ""}
                     if c not in self.ssl:
                         self.ssl.append(c)
 
@@ -333,6 +339,20 @@ class ZeekEngine(object):
                                                 "host": host,
                                                 "level": "Moderate",
                                                 "id": "SSL-03"})
+
+        if self.iocs_analysis:
+            for cert in self.ssl:
+                # Check if the domain in the certificate haven't been blacklisted
+                # This check can be good if the domain has already been cached by
+                # the device so it wont appear in self.dns.
+                for domain in self.bl_domains:
+                    if domain[1] != "tracker":
+                        if cert["cn"].endswith(domain[0]):
+                            self.alerts.append({"title": self.template["SSL-04"]["title"].format(domain[0], domain[1].upper()),
+                                                "description": self.template["SSL-04"]["description"].format(domain[0]),
+                                                "host": domain[0],
+                                                "level": "High",
+                                                "id": "SSL-04"})
 
     def alerts_check(self):
         """

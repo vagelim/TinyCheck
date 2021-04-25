@@ -68,6 +68,10 @@
             "title": "The certificate associated to {} is self-signed.",
             "description": "The use of self-signed certificates is a common thing for attacker infrastructure. We recommend to check the host {} which is associated to this certificate, by looking at the domain name (if any), its WHOIS record, its creation date, and by checking its reputation on the internet."
         },
+        "SSL-04": {
+            "title": "A certificate contains the domain name {}, categorized as {}",
+            "description": "One of the certificates exchanged contains the domain name {}. This domain name has been explicitly classified as malicious. Your device is definitely compromised and should be investigated further by a professional team."
+        },
         "ADV-01": {
             "title": "Check the alerts for {}",
             "description": "Please, check the reputation of the host {}, this one seems to be malicious as it leveraged {} alerts during the session."
