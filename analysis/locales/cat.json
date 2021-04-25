@@ -68,6 +68,10 @@
             "title": "El certificat associat a {} és autosignat.",
             "description": "L'ús de certificats autosignats és un element comú en infrastructures utilitzades per atacants. Recomanem comprovar el host {} que està associat a aquest certificat, especialment el seu nom de domini (en cas d'existir), el seu registre WHOIS, la seva data de creació i verificant la seva reputació a Internet. "
         },
+        "SSL-04": {
+            "title": "Un certificat conté el nom de domini {}, classificat com a {}",
+            "description": "Un dels certificats intercanviats conté el nom de domini {}. Aquest nom de domini s’ha classificat explícitament com a maliciós. El vostre dispositiu està compromès i hauria de ser investigat amb més detall per un equip professional."
+        },
         "ADV-01": {
             "title": "Comprovi les alertes per {}",
             "description": "Si us plau, verifiqui la reputació del sistema {}, ja que sembla ser maliciós per aparèixer en {} alertes durant la sessió."

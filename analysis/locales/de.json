@@ -68,6 +68,10 @@
             "title": "Das mit {} verknüpfte Zertifikat ist selbstsigniert.",
             "description": "Die Verwendung von selbstsignierten Zertifikaten ist in der Infrastruktur von Angreifern weit verbreitet. Wir empfehlen, den mit diesem Zertifikat verknüpften Host {} zu überprüfen. Sehen Sie sich dazu seinen Domain-Namen (falls vorhanden), den WHOIS-Eintrag und das Erstellungsdatum an und überprüfen Sie die Reputation des Hosts im Internet."
         },
+        "SSL-04": {
+            "title": "Ein Zertifikat enthält den Domainnamen {}, der als {} kategorisiert ist",
+            "description": "Eines der ausgetauschten Zertifikate enthält den Domainnamen {}. Dieser Domainname wurde explizit als bösartig eingestuft. Ihr Gerät ist sicherlich kompromittiert und sollte von einem professionellen Team genauer untersucht werden."
+        },
         "ADV-01": {
             "title": "Überprüfen Sie die Warnungen für {}",
             "description": "Bitte überprüfen Sie die Reputation des Hosts {}. Dieser scheint bösartig zu sein, da er während der Sitzung {} Warnungen verursacht hat."

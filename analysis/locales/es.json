@@ -68,6 +68,10 @@
             "title": "El certificado asociado a {} es autofirmado.",
             "description": "El uso de certificados autofirmados es un elemento común en infraestructuras utilizadas por atacantes. Recomendamos comprobar el host {} que está asociado a este certificado, especialmente su nombre de dominio (en caso de existir), su registro WHOIS, su fecha de creación y verificando su reputación en Internet."
         },
+        "SSL-04": {
+            "title": "Un certificado contiene el nombre de dominio {}, categorizado como {}",
+            "description": "Uno de los certificados intercambiados contiene el nombre de dominio {}. Este nombre de dominio se ha clasificado explícitamente como malicioso. Su dispositivo está definitivamente comprometido y debe ser investigado más a fondo por un equipo profesional."
+        },
         "ADV-01": {
             "title": "Compruebe las alertas para {}",
             "description": "Por favor, verifique la reputación del host {}, ya que parece ser malicioso por aparecer en {} alertas durante la sesión."
