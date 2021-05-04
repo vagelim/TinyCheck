@@ -48,6 +48,18 @@
             "title": "Ein Zertifikat, das mit {} Aktivitäten verknüpft ist, wurde in der Kommunikationsverbindung zu {} gefunden.",
             "description": "Das Zertifikat ({}), das mit {} verknüpft ist, wurde explizit als bösartig gekennzeichnet. Dies weist darauf hin, dass Ihr Gerät wahrscheinlich kompromittiert ist und eine forensische Analyse benötigt."
         },
+        "IOC-08": {
+            "title": "Es wurde eine HTTP-Abfrage zu {} ausgeführt, was als {} gekennzeichnet ist.",
+            "description": "Der in der Aufnahme vorkommende Domain-Name {} wurde explizit als bösartig gekennzeichnet. Dies weist darauf hin, dass Ihr Gerät wahrscheinlich kompromittiert ist und eingehend untersucht werden muss."
+        },
+        "IOC-09": {
+            "title": "Es wurde eine HTTP-Abfrage zur Domain {} ausgeführt, die einen Free-DNS-Dienst nutzt.",
+            "description": "Der Domain-Name {} nutzt einen Free-DNS-Dienst. Dienste dieser Art werden häufig von Cyberkriminellen oder staatlich unterstützten Angreifern bei ihren Operationen genutzt. Es ist sehr verdächtig, dass eine im Hintergrund laufende Anwendung einen solchen Dienst verwendet. Bitte untersuchen Sie das näher."
+        },
+        "IOC-10": {
+            "title": "Es wurde eine HTTP-Abfrage zur Domain {} ausgeführt, die eine verdächtige TLD enthält.",
+            "description": "Der Domain-Name {} nutzt eine verdächtige Top-Level-Domain ({}). Diese nicht-generische TLD ist zwar selbst nicht bösartig, wird aber häufig von Cyberkriminellen und bei staatlich unterstützten Operationen verwendet. Bitte überprüfen Sie diese Domain anhand einer Internetsuche. Wenn dieser Host in anderen Warnungen erwähnt wird, können Sie ihn als sehr verdächtig betrachten."
+        },
         "ACT-01": {
             "title": "Die Domain {} nutzt einen verdächtigen Nameserver ({}).",
             "description": "Der Domain-Name {} nutzt einen Nameserver, der explizit mit bösartigen Aktivitäten in Verbindung gebracht wird. Viele Cyberkriminelle und staatlich unterstützte Angreifer nutzen Registrare dieser Art, weil sie Kryptowährungen und anonyme Zahlungen zulassen. Es wird empfohlen, diese Domain und die damit verknüpfte laufende Anwendung mithilfe einer forensischen Analyse des Telefons näher zu untersuchen."

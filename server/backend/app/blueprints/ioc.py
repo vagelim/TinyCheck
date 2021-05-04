@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, jsonify, Response
+from flask import Blueprint, jsonify, Response, request
 from app.decorators import require_header_token, require_get_token
 from app.classes.iocs import IOCs
 
 import json
+from urllib.parse import unquote
 
 ioc_bp = Blueprint("ioc", __name__)
 ioc = IOCs()
@@ -19,6 +20,8 @@ def add(ioc_type, ioc_tag, ioc_tlp, ioc_value):
         :return: status of the operation in JSON
     """
     source = "backend"
+    if ioc_type == "snort":
+        ioc_value = unquote("/".join(request.full_path.split("/")[7:]))
     res = IOCs.add(ioc_type, ioc_tag, ioc_tlp, ioc_value, source)
     return jsonify(res)
 

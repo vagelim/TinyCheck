@@ -48,6 +48,18 @@
             "title": "Un certificado asociado a actividades {} ha sido identificado en una comunicación hacia {}.",
             "description": "El certificado ({}) asociado a {} ha sido explícitamente etiquetado como malicioso. Esto indica que su dispositivo está probablemente comprometido y necesita ser analizado en profundidad por un especialista forense."
         },
+        "IOC-08": {
+            "title": "Se ha realizado una petición HTTP a {} que está etiquetada como {}.",
+            "description": "El dominio {} identificado en la captura ha sido explícitamente etiquetado como malicioso. Esto indica que su dispositivo está probablemente comprometido y debe ser investigado en profundidad."
+        },
+        "IOC-09": {
+            "title": "Se ha realizado una petición HTTP al dominio {} que es un DNS gratuito.",
+            "description": "El dominio {} está usando un servicio DNS gratuito. Este tipo de servicios es comúnmente utilizado por cibercriminales y otros actores de amenazas. Es altamente sospechoso que una aplicación ejecutándose en segundo plano use este tipo de servicios. Por favor investigue."
+        },
+        "IOC-10": {
+            "title": "Se ha realizado una petición HTTP al dominio {} que contiene un TLD sospechoso.",
+            "description": "El dominio {} está usando un dominio de primero nivel -TLD- ({}). Aunque no sea malicioso, este TLP no-genérico es usado por cibercriminales y otros actores de amenazas con regularidad. Verifique este dominio mediante su búsqueda en Internet. Si hay otras alertas relacionadas con este host, por favor considérelo como muy sospechoso."
+        },
         "ACT-01": {
             "title": "El dominio {} está usando un servidor de nombres sospechoso ({}).",
             "description": "El nombre de dominio {} usa un servidor de nombres que ha sido explícitamente etiquetado como asociado a actividad maliciosa. Muchos ciberdelincuentes y otros actores de amenazas utilizan este tipo de registradores ya que aceptan criptomonedas y pagos anónimos. Se recomienda investigar este dominio y la aplicación en ejecución asociada mediante un análisis forense del dispositivo."

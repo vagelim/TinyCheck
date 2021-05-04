@@ -285,6 +285,54 @@ class ZeekEngine(object):
                                             "level": "High",
                                             "id": "IOC-07"})
 
+    def http_check(self, dir):
+        """
+            Check on the http.log:
+                * Blacklisted domain/tld from the Host header field.
+            Can be used when no DNS query have been done during the session (already cached by the device.)
+            :return: nothing - all stuff appended to self.alerts
+        """
+
+        if os.path.isfile(os.path.join(dir, "http.log")):
+            for record in ParseZeekLogs(os.path.join(dir, "http.log"), output_format="json", safe_headers=False):
+                if record is not None:
+                    c = {"host": record['host']}
+                    if c not in self.http:
+                        self.http.append(c)
+
+        if self.iocs_analysis:
+            for c in self.http:
+
+                # If we already know the host form DNS, let's continue.
+                if c["host"] in [r["domain"] for r in self.dns]:
+                    continue
+
+                # Check for blacklisted domain.
+                for h in self.bl_domains:
+                    if h[1] != "tracker":
+                        if c["host"].endswith(h[0]):
+                            self.alerts.append({"title": self.template["IOC-08"]["title"].format(c["host"], h[1].upper()),
+                                                "description": self.template["IOC-08"]["description"].format(c["host"]),
+                                                "host": c["host"],
+                                                "level": "High",
+                                                "id": "IOC-08"})
+                # Check for freedns.
+                for h in self.bl_freedns:
+                    if c["host"].endswith(h[0]):
+                        self.alerts.append({"title": self.template["IOC-09"]["title"].format(c["host"]),
+                                            "description": self.template["IOC-09"]["description"].format(c["host"]),
+                                            "host": c["host"],
+                                            "level": "Moderate",
+                                            "id": "IOC-09"})
+                # Check for fancy TLD.
+                for h in self.bl_tlds:
+                    if c["host"].endswith(h[0]):
+                        self.alerts.append({"title": self.template["IOC-10"]["title"].format(c["host"]),
+                                            "description": self.template["IOC-10"]["description"].format(c["host"], h[0]),
+                                            "host": c["host"],
+                                            "level": "Low",
+                                            "id": "IOC-10"})
+
     def ssl_check(self, dir):
         """
             Check on the ssl.log:
@@ -345,6 +393,10 @@ class ZeekEngine(object):
                 # Check if the domain in the certificate haven't been blacklisted
                 # This check can be good if the domain has already been cached by
                 # the device so it wont appear in self.dns.
+
+                if any([cert["cn"].endswith(r["domain"]) for r in self.dns]):
+                    continue
+
                 for domain in self.bl_domains:
                     if domain[1] != "tracker":
                         if cert["cn"].endswith(domain[0]):
@@ -399,6 +451,7 @@ class ZeekEngine(object):
         self.fill_dns(self.working_dir + "/assets/")
         self.netflow_check(self.working_dir + "/assets/")
         self.ssl_check(self.working_dir + "/assets/")
+        self.http_check(self.working_dir + "/assets/")
         self.files_check(self.working_dir + "/assets/")
         self.alerts_check()
 
