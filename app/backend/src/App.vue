@@ -40,6 +40,9 @@
                   <span @click="$router.push('/iocs/manage')">Manage IOCs</span>
                 </li>
                 <li class="menu-item">
+                  <span @click="$router.push('/iocs/misp')">MISP IOCs</span>
+                </li>
+                <li class="menu-item">
                   <span @click="$router.push('/iocs/search')">Search IOCs</span>
                 </li>
               </ul>

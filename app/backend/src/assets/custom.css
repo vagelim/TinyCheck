@@ -651,3 +651,56 @@ h4, h5 {
 .upper {
 	text-transform: uppercase;
 }
+
+/*** MISP CSS ***/
+
+.misp-form {
+	/* Using CSS Grid to lay out the elements in two-dimensions: */
+	display: grid;
+	/* specifying a 0.2em gutter/gap between adjacent elements: */
+	gap: 0.2em;
+	overflow:auto;
+	grid-template-columns: 10em 0.5em 1fr;
+	width: 100%;
+	border:0.05rem solid #cecece;
+	border-radius:.1rem;
+	margin-bottom:.4rem;
+	padding:.4rem;
+}
+
+.misp-label {
+	/* placing all <label> elements in the grid column 1 (the first): */
+	grid-column: 1;
+	text-align: left;
+}
+
+.misp-name {
+	font-size: 1rem;
+	font-family: "Roboto-Bold";
+	color: #484848;
+}
+
+.misp-name:disabled {
+	border-style: none;
+	color:inherit;
+	background-color: inherit;
+	padding: unset;
+}
+
+.misp-input {
+	grid-column: 3;
+	align-self: center;
+}
+
+.misp-input:disabled {
+	border-style: none;
+	color:inherit;
+	background-color: inherit;
+	padding: unset;
+}
+
+.misp-button {
+	/* positioning the <button> element in the grid-area identified
+	   by the name of 'submit': */
+	grid-area: submit;
+}

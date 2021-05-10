@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, jsonify, Response
+from flask import Blueprint, jsonify, Response, request
 from app.decorators import require_header_token, require_get_token
 from app.classes.iocs import IOCs
 
@@ -20,6 +20,20 @@ def add(ioc_type, ioc_tag, ioc_tlp, ioc_value):
     """
     source = "backend"
     res = IOCs.add(ioc_type, ioc_tag, ioc_tlp, ioc_value, source)
+    return jsonify(res)
+
+
+@ioc_bp.route('/add_post', methods=['POST'])
+@require_header_token
+def add_post():
+    """
+        Parse and add an IOC to the database using the post method.
+        :return: status of the operation in JSON
+    """
+
+    data = json.loads(request.data)
+    ioc = data["data"]["ioc"]
+    res = IOCs.add(ioc["ioc_type"], ioc["ioc_tag"], ioc["ioc_tlp"], ioc["ioc_value"], ioc["ioc_source"])
     return jsonify(res)
 
 

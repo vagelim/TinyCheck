@@ -17,3 +17,14 @@ CREATE TABLE "whitelist" (
 	"added_on"	INTEGER NOT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
+
+CREATE TABLE "mispinstance" (
+	"id" 	INTEGER UNIQUE,
+	"name" 	TEXT,
+	"url"	TEXT NOT NULL,
+	"apikey"	TEXT NOT NULL,
+	"verifycert" INTEGER NOT NULL DEFAULT 0,
+	"source" TEXT NOT NULL,
+	"added_on" NUMERIC NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
