@@ -94,6 +94,7 @@
 
 <script>
 import router from '../router'
+import axios from 'axios'
 
 export default {
     name: 'report',   
@@ -114,7 +115,7 @@ export default {
         },
         new_capture: function() {
             axios.get('/api/misc/delete-captures', { timeout: 30000 })
-            .then(response => { 
+            .then(() => { 
                 router.push({ name: 'generate-ap' })
                 })
             .catch(err => (console.log(err)))
