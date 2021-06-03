@@ -48,6 +48,18 @@
             "title": "Um certificado associado a atividades de {} foi encontrado na comunicação para {}.",
             "description": "O certificado ({}) associado a {} foi explicitamente marcado como malicioso. Isso indica que o dispositivo provavelmente foi comprometido e precisa de uma análise forense."
         },
+        "IOC-08": {
+            "title": "Uma solicitação de HTTP foi feita para {}, marcado como {}.",
+            "description": "O nome de domínio {} visto na captura foi explicitamente marcado como malicioso. Isso indica que o dispositivo provavelmente foi comprometido e precisa ser analisado com cuidado."
+        },
+        "IOC-09": {
+            "title": "Uma solicitação de HTTP foi feita para o domínio {}, que é um DNS gratuito.",
+            "description": "O nome de domínio {} está usando um serviço de DNS gratuito. Esse tipo de serviço é comumente usado por cibercriminosos ou agências de inteligência estatais no exercício de suas funções. É muito suspeito que aplicativos em execução em segundo plano usem esse tipo de serviço e isso deve ser analisado com cuidado."
+        },
+        "IOC-10": {
+            "title": "Uma solicitação de HTTP foi feita para o domínio {}, que contém um TLD (domínio de nível superior) suspeito.",
+            "description": "O nome de domínio {} está usando um TLD suspeito ({}). Mesmo não sendo malicioso, esse TLD não genérico é frequentemente usado por cibercriminosos ou agências de inteligência estatais. Analise a reputação do domínio pesquisando-o na internet. Se outros alertas forem observados, considere esse host como muito suspeito."
+        },
         "ACT-01": {
             "title": "O domínio {} está usando um servidor de nomes suspeito ({}).",
             "description": "O nome de domínio {} está usando um servidor de nomes explicitamente marcado como associado a atividades maliciosas. Muitos cibercriminosos e agentes de inteligência estatais usam esse tipo de registradores porque isso permite pagamentos com criptomoedas e anônimos. É recomendável investigar esse domínio e o aplicativo em execução por meio de uma análise forense do telefone."

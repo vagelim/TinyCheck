@@ -39,6 +39,10 @@
                      })
                     .catch(err => (console.log(err)))
             },
+            delete_captures: function() {
+                axios.get('/api/misc/delete-captures', { timeout: 30000 })
+                    .catch(err => (console.log(err)))
+            }, 
             goto_home: function() {
                 var list_ssids = this.list_ssids
                 var internet   = this.internet
@@ -46,6 +50,7 @@
             }
         },
         created: function() {
+            this.delete_captures();
             setTimeout(function () { this.internet_check(); }.bind(this), 5000);
         }
     }

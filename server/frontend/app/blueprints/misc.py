@@ -3,12 +3,23 @@
 
 import subprocess as sp
 from flask import Blueprint, jsonify
-from app.utils import read_config
+from app.utils import read_config, delete_captures
 import re
 import sys
 import os
 
 misc_bp = Blueprint("misc", __name__)
+
+
+@misc_bp.route("/delete-captures", methods=["GET"])
+def api_delete_captures():
+    """
+        Delete the zombies capture folders (if any)
+    """
+    if delete_captures():
+        return jsonify({"message": "Captures deleted", "status": True})
+    else:
+        return jsonify({"message": "Issue while removing captures", "status": False})
 
 
 @misc_bp.route("/reboot", methods=["GET"])

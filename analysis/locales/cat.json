@@ -48,6 +48,18 @@
             "title": "Un certificat associat a activitats {} ha estat identificat en una comunicació cap a {}.",
             "description": "El certificat ({}) associat a {} ha estat explícitament etiquetat com a maliciós. Això indica que el seu dispositiu està probablement compromès i necessita ser analitzat en profunditat per un especialista forense."
         },
+        "IOC-08": {
+            "title": "S'ha fet una petició HTTP a {} que està etiquetada com {}.",
+            "description": "El domini {} identificat en la captura ha estat explícitament etiquetat com a maliciós. Això indica que el dispositiu està probablement compromès i ha de ser investigat en profunditat."
+        },
+        "IOC-09": {
+            "title": "S'ha fet una petició HTTP a el domini {} que és un DNS gratuït.",
+            "description": "El domini {} està utilitzant un servei DNS gratuït. Aquest tipus de serveis és utilitzat per cibercriminals i altres actors d'amenaces de manera comú. És força sospitós que una aplicació en segon pla utilitzi aquest tipus de serveis.Per favor investigui. "
+        },
+        "IOC-10": {
+            "title": "S'ha fet una petició HTTP a el domini {} que conté un TLD sospitós.",
+            "description": "El domini {} està utilitzant un domini de primer nivell -TLD- ({}). Encara que no sigui maliciós, aquest TLP no-genèric és usat per cibercriminals i altres actors d'amenaces amb regularitat. Comproveu aquest domini mitjançant la seva cerca a Internet. Si hi ha altres alertes relacionades amb aquest host, considereu-lo com a molt sospitós. "
+        },
         "ACT-01": {
             "title": "El domini {} està utilitzant un servidor de noms sospitós ({}).",
             "description": "El nom de domini {} utilitza un servidor de noms que ha estat explícitament etiquetat i associat a activitat maliciosa. Molts ciberdelinqüents i altres actors d'amenaces utilitzen aquest tipus de registradors ja que accepten criptomonedes i pagaments anònims. Es recomana investigar aquest domini i l'aplicació en execució associada mitjançant un anàlisi forense de el dispositiu. "

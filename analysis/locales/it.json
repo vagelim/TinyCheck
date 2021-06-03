@@ -48,6 +48,18 @@
             "title": "Nella comunicazione a {} è stato rilevato un certificato associato ad attività {}.",
             "description": "Il certificato ({}) associato a {} è stato esplicitamente contrassegnato come dannoso. Questo indica che il dispositivo è potenzialmente compromesso e necessita di un'analisi forense."
         },
+        "IOC-08": {
+            "title": "È stata effettuata una richiesta HTTP a {} con contrassegno {}.",
+            "description": "Il nome di dominio {} visualizzato nell'acquisizione è stato esplicitamente contrassegnato come dannoso. Questo indica che il dispositivo è potenzialmente compromesso e deve essere esaminato a fondo."
+        },
+        "IOC-09": {
+            "title": "È stata effettuata una richiesta HTTP al dominio {} che è un servizio Free DNS.",
+            "description": "Il nome di dominio {} utilizza un servizio Free DNS. Questo tipo di servizio è comunemente utilizzato durante le operazioni di criminali informatici o autori di attacchi commissionati da stati esteri. L'utilizzo di questo tipo di servizio da parte di un'applicazione in esecuzione in background è molto sospetto e richiede ulteriori indagini."
+        },
+        "IOC-10": {
+            "title": "È stata effettuata una richiesta HTTP al dominio {} contenente un dominio di primo livello sospetto.",
+            "description": "Il nome di dominio {} utilizza un dominio di primo livello sospetto ({}). Anche se non dannoso, questo dominio di primo livello non generico viene utilizzato regolarmente durante le operazioni di criminali informatici o autori di attacchi commissionati da stati esteri. Controllare questo dominio effettuando una ricerca tramite un motore di ricerca Internet. Se altri avvisi sono correlati all'host, è necessario considerare questo elemento molto sospetto."
+        },
         "ACT-01": {
             "title": "Il dominio {} utilizza un server dei nomi sospetto ({}).",
             "description": "Il nome di dominio {} utilizza un server dei nomi che è stato esplicitamente contrassegnato come associato ad attività dannose. Molti criminali informatici e autori di attacchi commissionati da stati esteri utilizzano questo tipo di registrar poiché sono ammessi criptovalute e pagamenti anonimi. È consigliabile indagare su questo dominio e sull'applicazione in esecuzione associata eseguendo un'analisi forense del telefono."
