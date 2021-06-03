@@ -7,6 +7,8 @@ import yaml
 import sys
 import os
 from functools import reduce
+import shutil
+import re
 
 
 def terminate_process(process):
@@ -33,3 +35,16 @@ def read_config(path):
     config = yaml.load(open(os.path.join(dir, "config.yaml"), "r"),
                        Loader=yaml.SafeLoader)
     return reduce(dict.get, path, config)
+
+
+def delete_captures():
+    """
+        Delete potential zombies capture directories
+    """
+    try:
+        for d in os.listdir("/tmp/"):
+            if re.match("[A-F0-9]{8}", d):
+                shutil.rmtree(os.path.join("/tmp/", d))
+        return True
+    except:
+        return False

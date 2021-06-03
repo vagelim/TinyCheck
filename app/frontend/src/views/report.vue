@@ -113,7 +113,11 @@ export default {
             router.replace({ name: 'save-capture', params: { capture_token: capture_token } });
         },
         new_capture: function() {
-            router.push({ name: 'generate-ap' })
+            axios.get('/api/misc/delete-captures', { timeout: 30000 })
+            .then(response => { 
+                router.push({ name: 'generate-ap' })
+                })
+            .catch(err => (console.log(err)))
         },
         grep_keyword: function(kw, level){
             try {
