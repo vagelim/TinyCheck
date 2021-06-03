@@ -338,7 +338,7 @@ create_desktop() {
 Version=1.0
 Type=Application
 Terminal=false
-Exec=chromium-browser http://localhost
+Exec=bash /usr/share/tinycheck/kiosk.sh
 Name=TinyCheck
 Comment=Launcher for the TinyCheck frontend
 Icon=/usr/share/tinycheck/app/frontend/src/assets/icon.png
