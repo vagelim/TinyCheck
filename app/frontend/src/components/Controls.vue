@@ -53,7 +53,7 @@ export default {
         load_config: function() {
             axios.get(`/api/misc/config`, { timeout: 60000 })
             .then(response => {
-                this.quit_available = response.data.quit_option
+                this.quit_available = (response.data.quit_option && (["localhost", "127.0.0.1"].some(h => window.location.host.includes(h) )))
                 this.off_available = response.data.shutdown_option
             })
             .catch(error => { console.log(error) });
