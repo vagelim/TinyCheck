@@ -56,7 +56,12 @@ class IOCs(object):
                 db.session.commit()
                 return {"status": True,
                         "message": "IOC added",
-                        "ioc": escape(ioc_value)}
+                        "ioc": escape(ioc_value),
+                        "type": escape(ioc_type),
+                        "tlp": escape(ioc_tlp),
+                        "tag": escape(ioc_tag),
+                        "source": escape(source),
+                        "added_on": escape(added_on)}
             else:
                 return {"status": False,
                         "message": "Wrong IOC format",
