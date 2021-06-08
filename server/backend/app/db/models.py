@@ -23,11 +23,11 @@ class MISPInst(db.Model):
     def __init__(self, name, url, key, ssl, added_on):
         self.name = name
         self.url = url
-        self.authkey = key
+        self.apikey = key
         self.verifycert = ssl
         self.added_on = added_on
 
 
 db.mapper(Whitelist, db.Table('whitelist', db.metadata, autoload=True))
 db.mapper(Ioc, db.Table('iocs', db.metadata, autoload=True))
-db.mapper(MISP, db.Table('misp', db.metadata, autoload=True))
+db.mapper(MISPInst, db.Table('misp', db.metadata, autoload=True))

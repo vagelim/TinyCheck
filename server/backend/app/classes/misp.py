@@ -18,7 +18,7 @@ class MISP(object):
         return None
 
     @staticmethod
-    def add(misp_name, misp_url, misp_key, misp_verifycert):
+    def add_instance(misp_name, misp_url, misp_key, misp_verifycert):
         """
             Parse and add a MISP instance to the database.
             :return: status of the operation in JSON
@@ -57,7 +57,7 @@ class MISP(object):
                     "message": "The MISP instance name can't be empty"}
 
     @staticmethod
-    def edit(misp_id, misp_name, misp_url, misp_key, misp_verifycert):
+    def edit_instance(misp_id, misp_name, misp_url, misp_key, misp_verifycert):
         """
             Parse and edit the desired MISP instance.
             :return: status of the operation in JSON
@@ -134,48 +134,39 @@ class MISP(object):
         misp = MISPInst.query.get(int(misp_id))
         if misp is not None:
             if misp.url and misp.apikey:
-                try:
-                    # Connect to MISP instance and get network activity attributes.
-                    m = PyMISP(misp.url, misp.apikey, misp.verifycert)
-                    r = m.search("attributes", category="Network activity")
+                # Connect to MISP instance and get network activity attributes.
+                m = PyMISP(misp.url, misp.apikey, misp.verifycert)
+                r = m.search("attributes", category="Network activity")
 
-                    for attr in r["Attribute"]:
-                        if attr["type"] in ["ip_dst", "domain", "snort", "x509-fingerprint-sha1"]:
+                for attr in r["Attribute"]:
+                    if attr["type"] in ["ip-dst", "domain", "snort", "x509-fingerprint-sha1"]:
 
-                            ioc = {"value": attr["value"],
-                                   "type": None,
-                                   "tag": "suspect",
-                                   "tlp": "white"}
+                        ioc = {"value": attr["value"],
+                               "type": None,
+                               "tag": "suspect",
+                               "tlp": "white"}
 
-                            # Deduce the IOC type.
-                            if re.match(defs["iocs_types"][0]["regex"], attr["value"]):
-                                ioc["type"] = "ipv4addr"
-                            elif re.match(defs["iocs_types"][1]["regex"], attr["value"]):
-                                ioc["type"] = "ipv6addr"
-                            elif re.match(defs["iocs_types"][3]["regex"], attr["value"]):
-                                ioc["type"] = "domain"
-                            elif re.match(defs["iocs_types"][4]["regex"], attr["value"]):
-                                ioc["type"] = "sha1cert"
-                            elif "alert " in attr["value"][0:5]:
-                                ioc["type"] = "snort"
+                        # Deduce the IOC type.
+                        if re.match(defs["iocs_types"][0]["regex"], attr["value"]):
+                            ioc["type"] = "ipv4addr"
+                        elif re.match(defs["iocs_types"][1]["regex"], attr["value"]):
+                            ioc["type"] = "ipv6addr"
+                        elif re.match(defs["iocs_types"][3]["regex"], attr["value"]):
+                            ioc["type"] = "domain"
+                        elif re.match(defs["iocs_types"][4]["regex"], attr["value"]):
+                            ioc["type"] = "sha1cert"
+                        elif "alert " in attr["value"][0:6]:
+                            ioc["type"] = "snort"
+                        else:
+                            continue
 
-                            if "Tag" in attr:
-                                for tag in attribute['Tag']:
-                                    # Add the TLP of the IOC.
-                                    tlp = re.search(r"^(?:tlp:)(red|green|amber|white)", tag['name'])
-                                    if tlp: ioc["tlp"] = tlp.group(1)
+                        if "Tag" in attr:
+                            for tag in attr["Tag"]:
+                                # Add the TLP of the IOC.
+                                tlp = re.search(r"^(?:tlp:)(red|green|amber|white)", tag['name'].lower())
+                                if tlp: ioc["tlp"] = tlp.group(1)
 
-                                    # Add possible tag.
-                                    if lower(tag["name"]) in [t["tag"] for t in defs["iocs_tags"]]:
-                                        ioc["tag"] = lower(tag["name"])
-                            yield ioc
-                except:
-                    return {"status": False,
-                            "message": "An exception has been raised: ", sys.exc_info()[0])}
-                    pass
-            else:
-                return {"status": False,
-                        "message": "The URL or API key is empty."}
-        else:
-            return {"status": False,
-                    "message": "Unknown MISP instance."}
+                                # Add possible tag.
+                                if tag["name"].lower() in [t["tag"] for t in defs["iocs_tags"]]:
+                                    ioc["tag"] = tag["name"].lower()
+                        yield ioc

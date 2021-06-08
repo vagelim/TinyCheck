@@ -13,7 +13,7 @@ misp = MISP()
 
 @misp_bp.route('/add', methods=['POST'])
 @require_header_token
-def add():
+def add_instance():
     """
         Parse and add a MISP instance to the database.
         :return: status of the operation in JSON
@@ -21,31 +21,30 @@ def add():
     data = json.loads(request.data)
     instance = data["data"]["instance"]
 
-    source = "backend"
-    res = MISP.add(instance["name"], instance["url"],
-                   instance["key"], instance["ssl"], source)
+    res = MISP.add_instance(instance["name"], instance["url"],
+                   instance["key"], instance["ssl"])
     return jsonify(res)
 
 
 @misp_bp.route('/delete/<misp_id>', methods=['GET'])
 @require_header_token
-def delete(misp_id):
+def delete_instance(misp_id):
     """
         Delete a MISP instance by its id to the database.
         :return: status of the operation in JSON
     """
-    res = MISP.delete(misp_id)
+    res = MISP.delete_instance(misp_id)
     return jsonify(res)
 
 
 @misp_bp.route('/get_all', methods=['GET'])
-@require_header_token
+# @require_header_token
 def get_all():
     """
         Retreive a list of all MISP instances.
         :return: list of MISP instances in JSON.
     """
-    res = MISP.get_all()
+    res = MISP.get_instances()
     return jsonify({"results": [i for i in res]})
 
 
@@ -68,14 +67,14 @@ def get_iocs():
 
 @misp_bp.route('/edit', methods=['POST'])
 @require_header_token
-def edit():
+def edit_instance():
     """
         Parse and edit the desired MISP instance.
         :return: status of the operation in JSON
     """
     data = json.loads(request.data)
     instance = data["data"]["instance"]
-    res = MISP.edit(instance["id"],
+    res = MISP.edit_instance(instance["id"],
                     instance["name"],
                     instance["url"],
                     instance["apikey"],
