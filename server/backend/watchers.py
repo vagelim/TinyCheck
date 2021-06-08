@@ -4,6 +4,7 @@
 from app.utils import read_config
 from app.classes.iocs import IOCs
 from app.classes.whitelist import WhiteList
+from app.classes.misp import MISP
 
 import requests
 import json
@@ -16,11 +17,6 @@ from multiprocessing import Process
     in the configuration file. This in order to get
     automatically new iocs / elements from remote
     sources without user interaction.
-
-    As of today the default export JSON format from
-    the backend and unauthenticated HTTP requests
-    are accepted. The code is little awkward, it'll
-    be better in a next version ;)
 """
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -29,7 +25,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 def watch_iocs():
     """
         Retrieve IOCs from the remote URLs defined in config/watchers.
-        For each (new ?) IOC, add it to the DB.
+        For each IOC, add it to the DB.
     """
 
     # Retrieve the URLs from the configuration
@@ -45,8 +41,10 @@ def watch_iocs():
                     res = requests.get(w["url"], verify=False)
                     if res.status_code == 200:
                         content = json.loads(res.content)
-                        iocs_list = content["iocs"] if "iocs" in content else []
-                        to_delete = content["to_delete"] if "to_delete" in content else []
+                        iocs_list = content["iocs"] if "iocs" in content else [
+                        ]
+                        to_delete = content["to_delete"] if "to_delete" in content else [
+                        ]
                     else:
                         w["status"] = False
                 except:
@@ -93,8 +91,10 @@ def watch_whitelists():
                     res = requests.get(w["url"], verify=False)
                     if res.status_code == 200:
                         content = json.loads(res.content)
-                        elements = content["elements"] if "elements" in content else []
-                        to_delete = content["to_delete"] if "to_delete" in content else []
+                        elements = content["elements"] if "elements" in content else [
+                        ]
+                        to_delete = content["to_delete"] if "to_delete" in content else [
+                        ]
                     else:
                         w["status"] = False
                 except:
@@ -120,8 +120,25 @@ def watch_whitelists():
             break
 
 
+def watch_misp():
+    """
+        Retrieve IOCs from misp instances. Each new element is
+        tested added to the database.
+    """
+    while True:
+        for misp in MISP.get_instances():
+            try:
+                for ioc in MISP.get_iocs(misp.id):
+                    iocs.add(ioc["type"], ioc["tag"], ioc["tlp"],
+                             ioc["value"], "misp-{}".format(misp["name"]))
+            except:
+                continue
+
+
 p1 = Process(target=watch_iocs)
 p2 = Process(target=watch_whitelists)
+p3 = Process(target=watch_misp)
 
 p1.start()
 p2.start()
+p3.start()
