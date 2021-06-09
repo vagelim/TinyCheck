@@ -46,20 +46,3 @@ def get_all():
     """
     res = MISP().get_instances()
     return jsonify({"results": [i for i in res]})
-
-
-@misp_bp.route('/get_iocs', methods=['POST'])
-# @require_header_token
-def get_iocs():
-    """
-        Retreive a list of all MISP instances.
-        :return: list of MISP instances in JSON.
-    """
-
-    data = json.loads(request.data)
-    data = data["data"]
-
-    res = MISP.get_iocs(data["misp_id"],
-                        data["limit"],
-                        data["page"])
-    return jsonify(res)
