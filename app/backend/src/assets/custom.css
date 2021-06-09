@@ -658,22 +658,38 @@ h4, h5 {
 	/* Using CSS Grid to lay out the elements in two-dimensions: */
 	display: grid;
 	/* specifying a 0.2em gutter/gap between adjacent elements: */
-	gap: 0.2em;
+	gap: 0.4em;
 	overflow:auto;
 	grid-template-columns: 10em 0.5em 1fr;
 	width: 100%;
-	border:0.05rem solid #cecece;
 	border-radius:.1rem;
-	margin-bottom:.4rem;
-	padding:.4rem;
+	margin-bottom: .8rem;
 }
 
 .misp-label {
 	/* placing all <label> elements in the grid column 1 (the first): */
 	grid-column: 1;
 	text-align: left;
+	padding-top: .3em;
 }
 
+.misp-offline {
+	background-color: #e85600;
+	color: #FFF;
+	font-size: 11px;
+	border-radius: 3px;
+	padding:3px;
+	text-transform: uppercase;
+}
+
+.misp-online {
+	background-color: #64c800;
+	color: #FFF;
+	font-size: 11px;
+	border-radius: 3px;
+	padding:3px;
+	text-transform: uppercase;
+}
 .misp-name {
 	font-size: 1rem;
 	font-family: "Roboto-Bold";
@@ -703,4 +719,37 @@ h4, h5 {
 	/* positioning the <button> element in the grid-area identified
 	   by the name of 'submit': */
 	grid-area: submit;
+}
+
+.loading {
+	margin-bottom: 12px;
+	display: block;
+}
+
+.loading::after {
+    animation: loading .5s infinite linear;
+    background: 0 0;
+    border: .1rem solid #66758c;
+    border-radius: 50%;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    content: "";
+    display: block;
+    height: .8rem;
+    left: 50%;
+    margin-left: -.4rem;
+    margin-top: -.4rem;
+    opacity: 1;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    width: .8rem;
+    z-index: 1;
+}
+
+.loading.loading-lg::after {
+    height: 1.6rem;
+    margin-left: -.8rem;
+    margin-top: -.8rem;
+    width: 1.6rem;
 }

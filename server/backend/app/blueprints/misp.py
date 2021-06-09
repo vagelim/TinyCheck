@@ -20,11 +20,8 @@ def add_instance():
     """
     data = json.loads(request.data)
     instance = data["data"]["instance"]
-
-    res = MISP.add_instance(instance["name"], instance["url"],
-                   instance["key"], instance["ssl"])
+    res = misp.add_instance(instance)
     return jsonify(res)
-
 
 @misp_bp.route('/delete/<misp_id>', methods=['GET'])
 @require_header_token
@@ -33,16 +30,16 @@ def delete_instance(misp_id):
         Delete a MISP instance by its id to the database.
         :return: status of the operation in JSON
     """
-    res = MISP.delete_instance(misp_id)
+    res = misp.delete_instance(misp_id)
     return jsonify(res)
 
 
 @misp_bp.route('/get_all', methods=['GET'])
-# @require_header_token
+@require_header_token
 def get_all():
     """
         Retreive a list of all MISP instances.
         :return: list of MISP instances in JSON.
     """
-    res = MISP().get_instances()
+    res = misp.get_instances()
     return jsonify({"results": [i for i in res]})

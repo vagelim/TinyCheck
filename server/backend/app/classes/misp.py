@@ -17,11 +17,16 @@ class MISP(object):
     def __init__(self):
         return None
 
-    def add_instance(self, name, url, apikey, verify):
+    def add_instance(self, instance):
         """
             Parse and add a MISP instance to the database.
             :return: status of the operation in JSON
         """
+
+        url = instance["url"]
+        name = instance["name"]
+        apikey = instance["key"]
+        verify = instance["ssl"]
 
         sameinstances = db.session.query(MISPInst).filter(
             MISPInst.url == url, MISPInst.apikey == apikey)
