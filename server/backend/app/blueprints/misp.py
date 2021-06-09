@@ -44,7 +44,7 @@ def get_all():
         Retreive a list of all MISP instances.
         :return: list of MISP instances in JSON.
     """
-    res = MISP.get_instances()
+    res = MISP().get_instances()
     return jsonify({"results": [i for i in res]})
 
 
@@ -62,21 +62,4 @@ def get_iocs():
     res = MISP.get_iocs(data["misp_id"],
                         data["limit"],
                         data["page"])
-    return jsonify(res)
-
-
-@misp_bp.route('/edit', methods=['POST'])
-@require_header_token
-def edit_instance():
-    """
-        Parse and edit the desired MISP instance.
-        :return: status of the operation in JSON
-    """
-    data = json.loads(request.data)
-    instance = data["data"]["instance"]
-    res = MISP.edit_instance(instance["id"],
-                    instance["name"],
-                    instance["url"],
-                    instance["apikey"],
-                    instance["verifycert"])
     return jsonify(res)
