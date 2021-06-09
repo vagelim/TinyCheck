@@ -41,10 +41,8 @@ def watch_iocs():
                     res = requests.get(w["url"], verify=False)
                     if res.status_code == 200:
                         content = json.loads(res.content)
-                        iocs_list = content["iocs"] if "iocs" in content else [
-                        ]
-                        to_delete = content["to_delete"] if "to_delete" in content else [
-                        ]
+                        iocs_list = content["iocs"] if "iocs" in content else []
+                        to_delete = content["to_delete"] if "to_delete" in content else []
                     else:
                         w["status"] = False
                 except:
@@ -91,10 +89,8 @@ def watch_whitelists():
                     res = requests.get(w["url"], verify=False)
                     if res.status_code == 200:
                         content = json.loads(res.content)
-                        elements = content["elements"] if "elements" in content else [
-                        ]
-                        to_delete = content["to_delete"] if "to_delete" in content else [
-                        ]
+                        elements = content["elements"] if "elements" in content else []
+                        to_delete = content["to_delete"] if "to_delete" in content else []
                     else:
                         w["status"] = False
                 except:
@@ -125,15 +121,17 @@ def watch_misp():
         Retrieve IOCs from misp instances. Each new element is
         tested added to the database.
     """
-    while True:
-        for misp in MISP.get_instances():
-            try:
-                for ioc in MISP.get_iocs(misp.id):
-                    iocs.add(ioc["type"], ioc["tag"], ioc["tlp"],
-                             ioc["value"], "misp-{}".format(misp["name"]))
-            except:
-                continue
+    iocs, misp = IOCs(), MISP()
+    instances = [i for i in misp.get_instances()]
 
+    while instances:
+        for i, inst in enumerate(instances):
+            if inst["connected"]:
+                for ioc in misp.get_iocs(inst["id"]):
+                    iocs.add(ioc["type"], ioc["tag"], ioc["tlp"],
+                             ioc["value"], "misp-{}".format(inst["id"]))
+                instances.pop(i)
+        if instances: time.sleep(60)
 
 p1 = Process(target=watch_iocs)
 p2 = Process(target=watch_whitelists)

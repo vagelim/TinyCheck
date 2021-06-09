@@ -17,83 +17,34 @@ class MISP(object):
     def __init__(self):
         return None
 
-    @staticmethod
-    def add_instance(misp_name, misp_url, misp_key, misp_verifycert):
+    def add_instance(self, name, url, apikey, verify):
         """
             Parse and add a MISP instance to the database.
             :return: status of the operation in JSON
         """
 
         sameinstances = db.session.query(MISPInst).filter(
-            MISPInst.url == misp_url, MISPInst.apikey == misp_key)
+            MISPInst.url == url, MISPInst.apikey == apikey)
         if sameinstances.count():
             return {"status": False,
                     "message": "This MISP instance already exists"}
-        elif misp_name != "":
-            if misp_url != "":
-                if re.match(r"^(?:(?:http|https)://)", misp_url):
-                    if misp_key != "":
-                        added_on = int(time.time())
-                        db.session.add(MISPInst(misp_name, escape(
-                            misp_url), misp_key, misp_verifycert, added_on))
-                        db.session.commit()
-                        return {"status": True,
-                                "message": "MISP instance added",
-                                "name": escape(misp_name),
-                                "url": escape(misp_url),
-                                "apikey": escape(misp_key),
-                                "verifycert": escape(misp_verifycert)}
-                    else:
-                        return {"status": False,
-                                "message": "The key can't be empty"}
-                else:
-                    return {"status": False,
-                            "message": "The url must begin with http:// or https://"}
+        if name:
+            if self.test_instance(url, apikey, verify):
+                added_on = int(time.time())
+                db.session.add(MISPInst(name, escape(url), apikey, verify, added_on))
+                db.session.commit()
+                return {"status": True,
+                        "message": "MISP instance added",
+                        "name": escape(name),
+                        "url": escape(url),
+                        "apikey": escape(apikey),
+                        "verifycert": escape(verify)}
             else:
                 return {"status": False,
-                        "message": "The url can't be empty"}
+                        "message": "Please verify the connection to the MISP instance"}
         else:
             return {"status": False,
-                    "message": "The MISP instance name can't be empty"}
-
-    @staticmethod
-    def edit_instance(misp_id, misp_name, misp_url, misp_key, misp_verifycert):
-        """
-            Parse and edit the desired MISP instance.
-            :return: status of the operation in JSON
-        """
-        misp = MISPInst.query.get(int(misp_id))
-        otherinstances = db.session.query(MISPInst).filter(MISPInst.id != int(
-            misp_id), MISPInst.url == misp_url, MISPInst.apikey == misp_key)
-        if misp is None:
-            return {"status": False,
-                    "message": "Can't find the MISP instance"}
-        if otherinstances.count() > 0:
-            return {"status": False,
-                    "message": "This MISP instance already exists"}
-        elif misp_name != "":
-            if misp_url != "":
-                if re.match(r"^(?:(?:http|https)://)", misp_url):
-                    if misp_key != "":
-                        misp.name = misp_name
-                        misp.url = misp_url
-                        misp.apikey = misp_key
-                        misp.verifycert = misp_verifycert
-                        db.session.commit()
-                        return {"status": True,
-                                "message": "MISP instance edited"}
-                    else:
-                        return {"status": False,
-                                "message": "The key can't be empty"}
-                else:
-                    return {"status": False,
-                            "message": "The url must begin with http:// or https://"}
-            else:
-                return {"status": False,
-                        "message": "The url can't be empty"}
-        else:
-            return {"status": False,
-                    "message": "The MISP instance name can't be empty"}
+                    "message": "Please provide a name for your instance"}
 
     @staticmethod
     def delete_instance(misp_id):
@@ -110,8 +61,7 @@ class MISP(object):
             return {"status": False,
                     "message": "MISP instance not found"}
 
-    @staticmethod
-    def get_instances():
+    def get_instances(self):
         """
             Get MISP instances from the database
             :return: generator of the records.
@@ -122,7 +72,20 @@ class MISP(object):
                    "name": misp["name"],
                    "url": misp["url"],
                    "apikey": misp["apikey"],
-                   "verifycert": misp["verifycert"]}
+                   "verifycert": True if misp["verifycert"] else False,
+                   "connected": self.test_instance(misp["url"], misp["apikey"], misp["verifycert"]) }
+
+    @staticmethod
+    def test_instance(url, apikey, verify):
+        """
+            Test the connection of the MISP instance.
+            :return: generator of the records.
+        """
+        try:
+            PyMISP(url, apikey, verify)
+            return True
+        except:
+            return False
 
     @staticmethod
     def get_iocs(misp_id):
@@ -134,9 +97,13 @@ class MISP(object):
         misp = MISPInst.query.get(int(misp_id))
         if misp is not None:
             if misp.url and misp.apikey:
-                # Connect to MISP instance and get network activity attributes.
-                m = PyMISP(misp.url, misp.apikey, misp.verifycert)
-                r = m.search("attributes", category="Network activity")
+                try:
+                    # Connect to MISP instance and get network activity attributes.
+                    m = PyMISP(misp.url, misp.apikey, misp.verifycert)
+                    r = m.search("attributes", category="Network activity")
+                except:
+                    print("Unable to connect to the MISP instance ({}/{}).".format(misp.url, misp.apikey))
+                    return []
 
                 for attr in r["Attribute"]:
                     if attr["type"] in ["ip-dst", "domain", "snort", "x509-fingerprint-sha1"]:
@@ -151,6 +118,8 @@ class MISP(object):
                             ioc["type"] = "ip4addr"
                         elif re.match(defs["iocs_types"][1]["regex"], attr["value"]):
                             ioc["type"] = "ip6addr"
+                        elif re.match(defs["iocs_types"][2]["regex"], attr["value"]):
+                            ioc["type"] = "cidr"
                         elif re.match(defs["iocs_types"][3]["regex"], attr["value"]):
                             ioc["type"] = "domain"
                         elif re.match(defs["iocs_types"][4]["regex"], attr["value"]):
@@ -162,11 +131,11 @@ class MISP(object):
 
                         if "Tag" in attr:
                             for tag in attr["Tag"]:
-                                # Add the TLP of the IOC.
+                                # Add a TLP to the IOC if defined in tags.
                                 tlp = re.search(r"^(?:tlp:)(red|green|amber|white)", tag['name'].lower())
                                 if tlp: ioc["tlp"] = tlp.group(1)
 
-                                # Add possible tag.
+                                # Add possible tag (need to match TinyCheck tags)
                                 if tag["name"].lower() in [t["tag"] for t in defs["iocs_tags"]]:
                                     ioc["tag"] = tag["name"].lower()
                         yield ioc
