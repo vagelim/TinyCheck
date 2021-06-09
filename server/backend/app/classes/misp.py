@@ -148,9 +148,9 @@ class MISP(object):
 
                         # Deduce the IOC type.
                         if re.match(defs["iocs_types"][0]["regex"], attr["value"]):
-                            ioc["type"] = "ipv4addr"
+                            ioc["type"] = "ip4addr"
                         elif re.match(defs["iocs_types"][1]["regex"], attr["value"]):
-                            ioc["type"] = "ipv6addr"
+                            ioc["type"] = "ip6addr"
                         elif re.match(defs["iocs_types"][3]["regex"], attr["value"]):
                             ioc["type"] = "domain"
                         elif re.match(defs["iocs_types"][4]["regex"], attr["value"]):
