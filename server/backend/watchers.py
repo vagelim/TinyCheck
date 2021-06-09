@@ -119,7 +119,7 @@ def watch_whitelists():
 def watch_misp():
     """
         Retrieve IOCs from misp instances. Each new element is
-        tested added to the database.
+        tested and then added to the database.
     """
     iocs, misp = IOCs(), MISP()
     instances = [i for i in misp.get_instances()]
