@@ -3,8 +3,9 @@
 
 from app import db
 from app.db.models import MISPInst
-from sqlalchemy.sql import exists
 from app.definitions import definitions as defs
+
+from sqlalchemy.sql import exists
 from urllib.parse import unquote
 from flask import escape
 from pymisp import PyMISP
@@ -27,7 +28,7 @@ class MISP(object):
         name = instance["name"]
         apikey = instance["key"]
         verify = instance["ssl"]
-        last_sync = int(time.time()-31536000) # One year
+        last_sync = int(time.time()-31536000)  # One year
 
         sameinstances = db.session.query(MISPInst).filter(
             MISPInst.url == url, MISPInst.apikey == apikey)
