@@ -42,7 +42,7 @@ elif [ $PWD = "/tmp/tinycheck" ]; then
 
     echo "[+] Updating the database scheme..."
     cd /usr/share/tinycheck/
-    sqlite3 tinycheck.sqlite3 < assets/scheme.sql 2>/dev/null
+    sqlite3 tinycheck.sqlite3 < /tmp/tinycheck/assets/scheme.sql 2>/dev/null
 
     echo "[+] Updating current configuration with new values."
     if ! grep -q reboot_option /usr/share/tinycheck/config.yaml; then
@@ -77,9 +77,6 @@ elif [ $PWD = "/tmp/tinycheck" ]; then
     service tinycheck-backend restart
     service tinycheck-frontend restart
     service tinycheck-watchers restart
-
-    echo "[+] Deleting assets folder"
-    rm -rf /usr/share/tinycheck/assets/
 
     echo "[+] Updating the TinyCheck version"
     cd /tmp/tinycheck && git tag | tail -n 1 | xargs echo -n > /usr/share/tinycheck/VERSION
