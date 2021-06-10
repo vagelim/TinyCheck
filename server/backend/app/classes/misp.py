@@ -92,6 +92,7 @@ class MISP(object):
         except:
             return False
 
+    @staticmethod
     def update_sync(misp_id):
         """
             Update the last synchronization date by the actual date.
@@ -117,7 +118,7 @@ class MISP(object):
                 try:
                     # Connect to MISP instance and get network activity attributes.
                     m = PyMISP(misp.url, misp.apikey, misp.verifycert)
-                    r = m.search("attributes", category="Network activity", date_from=misp.lastsync)
+                    r = m.search("attributes", category="Network activity", date_from=int(misp.last_sync))
                 except:
                     print("Unable to connect to the MISP instance ({}/{}).".format(misp.url, misp.apikey))
                     return []

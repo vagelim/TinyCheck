@@ -130,6 +130,7 @@ def watch_misp():
                 for ioc in misp.get_iocs(inst["id"]):
                     iocs.add(ioc["type"], ioc["tag"], ioc["tlp"],
                              ioc["value"], "misp-{}".format(inst["id"]))
+                misp.update_sync(inst["id"])
                 instances.pop(i)
         if instances: time.sleep(60)
 
