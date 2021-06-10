@@ -20,12 +20,13 @@ class Whitelist(db.Model):
 
 
 class MISPInst(db.Model):
-    def __init__(self, name, url, key, ssl, added_on):
+    def __init__(self, name, url, key, ssl, added_on, last_sync):
         self.name = name
         self.url = url
         self.apikey = key
         self.verifycert = ssl
         self.added_on = added_on
+        self.last_sync = last_sync
 
 
 db.mapper(Whitelist, db.Table('whitelist', db.metadata, autoload=True))

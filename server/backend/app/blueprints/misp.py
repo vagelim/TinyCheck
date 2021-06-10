@@ -19,8 +19,7 @@ def add_instance():
         :return: status of the operation in JSON
     """
     data = json.loads(request.data)
-    instance = data["data"]["instance"]
-    res = misp.add_instance(instance)
+    res = misp.add_instance(data["data"]["instance"])
     return jsonify(res)
 
 @misp_bp.route('/delete/<misp_id>', methods=['GET'])

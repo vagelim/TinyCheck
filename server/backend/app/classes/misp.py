@@ -27,6 +27,7 @@ class MISP(object):
         name = instance["name"]
         apikey = instance["key"]
         verify = instance["ssl"]
+        last_sync = int(time.time()-31536000) # One year
 
         sameinstances = db.session.query(MISPInst).filter(
             MISPInst.url == url, MISPInst.apikey == apikey)
@@ -36,14 +37,11 @@ class MISP(object):
         if name:
             if self.test_instance(url, apikey, verify):
                 added_on = int(time.time())
-                db.session.add(MISPInst(name, escape(url), apikey, verify, added_on))
+                db.session.add(MISPInst(name, escape(
+                    url), apikey, verify, added_on, last_sync))
                 db.session.commit()
                 return {"status": True,
-                        "message": "MISP instance added",
-                        "name": escape(name),
-                        "url": escape(url),
-                        "apikey": escape(apikey),
-                        "verifycert": escape(verify)}
+                        "message": "MISP instance added"}
             else:
                 return {"status": False,
                         "message": "Please verify the connection to the MISP instance"}
@@ -78,7 +76,8 @@ class MISP(object):
                    "url": misp["url"],
                    "apikey": misp["apikey"],
                    "verifycert": True if misp["verifycert"] else False,
-                   "connected": self.test_instance(misp["url"], misp["apikey"], misp["verifycert"]) }
+                   "connected": self.test_instance(misp["url"], misp["apikey"], misp["verifycert"]),
+                   "lastsync": misp["last_sync"]}
 
     @staticmethod
     def test_instance(url, apikey, verify):
@@ -92,11 +91,23 @@ class MISP(object):
         except:
             return False
 
+    def update_sync(misp_id):
+        """
+            Update the last synchronization date by the actual date.
+            :return: bool, True if updated.
+        """
+        try:
+            misp = MISPInst.query.get(int(misp_id))
+            misp.last_sync = int(time.time())
+            db.session.commit()
+            return True
+        except:
+            return False
+
     @staticmethod
     def get_iocs(misp_id):
         """
             Get all IOCs from specific MISP instance
-            /!\ Todo: NEED TO ADD LAST SYNCHRO DATE + page etc. stuff.
             :return: generator containing the IOCs.
         """
         misp = MISPInst.query.get(int(misp_id))
@@ -105,7 +116,7 @@ class MISP(object):
                 try:
                     # Connect to MISP instance and get network activity attributes.
                     m = PyMISP(misp.url, misp.apikey, misp.verifycert)
-                    r = m.search("attributes", category="Network activity")
+                    r = m.search("attributes", category="Network activity", date_from=misp.lastsync)
                 except:
                     print("Unable to connect to the MISP instance ({}/{}).".format(misp.url, misp.apikey))
                     return []

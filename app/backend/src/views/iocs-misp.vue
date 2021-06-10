@@ -1,6 +1,6 @@
 <template>
     <div class="backend-content" id="content">
-        <div class="column col-6 col-xs-12">
+        <div class="column col-8 col-xs-12">
             <h3 class="s-title">Manage MISP instances</h3>
             <ul class="tab tab-block">
                 <li class="tab-item">
@@ -17,7 +17,7 @@
                     <label class="misp-label">Instance URL</label><span></span>
                     <input class="form-input" type="text" ref="misp_url" placeholder="https://misp.cyberacme.com" v-model="mispinst.url" required>
                     <label class="misp-label">Authentication key</label><span></span>
-                    <input class="form-input" type="text" ref="misp_key" placeholder="OqHSMyAuth3ntic4t10nK3y3iiH" v-model="mispinst.key" required>
+                    <input class="form-input" type="text" ref="misp_key" placeholder="OqHSMyAuth3ntic4t10nK3y0MyAuth3ntic4t10nK3y3iiH" v-model="mispinst.key" required>
                     <label class="misp-label">Verify certificate? </label><span></span>
                     <div style="flex:50%"><label class="form-switch">
                     <input type="checkbox" @change="switch_config('frontend', 'kiosk_mode')" v-model="mispinst.ssl">

@@ -133,6 +133,7 @@ def watch_misp():
                 instances.pop(i)
         if instances: time.sleep(60)
 
+
 p1 = Process(target=watch_iocs)
 p2 = Process(target=watch_whitelists)
 p3 = Process(target=watch_misp)

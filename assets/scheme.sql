@@ -25,5 +25,6 @@ CREATE TABLE "misp" (
 	"apikey"	TEXT NOT NULL,
 	"verifycert" INTEGER NOT NULL DEFAULT 0,
 	"added_on" NUMERIC NOT NULL,
+	"last_sync" NUMERIC NOT NULL DEFAULT 0,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
