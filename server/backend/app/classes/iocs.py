@@ -116,7 +116,8 @@ class IOCs(object):
                    "type": ioc["type"],
                    "tag": ioc["tag"],
                    "tlp": ioc["tlp"],
-                   "value": ioc["value"]}
+                   "value": ioc["value"],
+                   "source": ioc["source"]}
 
     @staticmethod
     def get_types():
