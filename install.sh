@@ -441,7 +441,7 @@ change_configs() {
 
 feeding_iocs() {
     echo -e "\e[39m[+] Feeding your TinyCheck instance with fresh IOCs and whitelist, please wait."
-    python3 /usr/share/tinycheck/server/backend/watchers.py
+    python3 /usr/share/tinycheck/server/backend/watchers.py 2>/dev/null
 }
 
 reboot_box() {
