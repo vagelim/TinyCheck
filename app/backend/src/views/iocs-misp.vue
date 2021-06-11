@@ -54,8 +54,8 @@
                                 <td>{{ i.url.replace('https://', '') .replace('http://', '') }}</td>
                                 <td>{{ i.apikey.slice(0,5) }} [...] {{ i.apikey.slice(35,40) }}</td>
                                 <td>
-                                    <span v-if="i.connected" class="misp-online tooltip" :data-tooltip="i.lastsync">✓ Online</span>
-                                    <span v-else class="misp-offline tooltip" :data-tooltip="i.lastsync">⚠ Offline</span>
+                                    <span v-if="i.connected" class="misp-online tooltip" :data-tooltip="i.lastsync">✓ ONLINE</span>
+                                    <span v-else class="misp-offline tooltip" :data-tooltip="i.lastsync">⚠ OFFLINE</span>
                                 </td>
                                 <td><button class="btn btn-sm" v-on:click="delete_instance(i)">Delete</button></td>
                             </tr>
@@ -133,7 +133,10 @@ export default {
             .then(response => {
                 if(response.data.results){
                     this.instances = response.data.results;
-                    this.instances.forEach(e => { e.lastsync = "Last-sync: "+ new Date(e.lastsync * 1000).toDateString() } )
+                    this.instances.forEach(e => { 
+                        var lastsync = parseInt((Date.now()/1000 - e.lastsync) / 86400)
+                        e.lastsync = (!lastsync)? "Synchronized today" : `Synchronized ${lastsync} day(s) ago`
+                        } )
                 }
                 this.loading = false
             })
