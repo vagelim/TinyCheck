@@ -25,9 +25,6 @@
                 <li class="menu-item">
                   <span @click="$router.push('/device/db')">Manage database</span>
                 </li>
-                <!-- <li class="menu-item">
-                  <span @click="$router.push('/device/user')">User configuration</a>
-                </li> -->
               </ul>
             </div>
           </div>
@@ -40,10 +37,10 @@
                   <span @click="$router.push('/iocs/manage')">Manage IOCs</span>
                 </li>
                 <li class="menu-item">
-                  <span @click="$router.push('/iocs/misp')">MISP Instances</span>
+                  <span @click="$router.push('/iocs/search')">Search IOCs</span>
                 </li>
                 <li class="menu-item">
-                  <span @click="$router.push('/iocs/search')">Search IOCs</span>
+                  <span @click="$router.push('/iocs/misp')">MISP Instances</span>
                 </li>
               </ul>
             </div>

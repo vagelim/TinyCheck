@@ -54,8 +54,8 @@
                                 <td>{{ i.url.replace('https://', '') .replace('http://', '') }}</td>
                                 <td>{{ i.apikey.slice(0,5) }} [...] {{ i.apikey.slice(35,40) }}</td>
                                 <td>
-                                    <span v-if="i.connected" class="misp-online">✓ Online</span>
-                                    <span v-else class="misp-offline">⚠ Offline</span>
+                                    <span v-if="i.connected" class="misp-online tooltip" :data-tooltip="i.lastsync">✓ Online</span>
+                                    <span v-else class="misp-offline tooltip" :data-tooltip="i.lastsync">⚠ Offline</span>
                                 </td>
                                 <td><button class="btn btn-sm" v-on:click="delete_instance(i)">Delete</button></td>
                             </tr>
@@ -131,7 +131,10 @@ export default {
             this.instances = []
             axios.get(`/api/misp/get_all`, { timeout: 10000, headers: {'X-Token': this.jwt} })
             .then(response => {
-                if(response.data.results) this.instances = response.data.results;
+                if(response.data.results){
+                    this.instances = response.data.results;
+                    this.instances.forEach(e => { e.lastsync = "Last-sync: "+ new Date(e.lastsync * 1000).toDateString() } )
+                }
                 this.loading = false
             })
             .catch(err => (console.log(err)))
