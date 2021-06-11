@@ -125,12 +125,15 @@ def watch_misp():
     instances = [i for i in misp.get_instances()]
 
     while instances:
-        for i, inst in enumerate(instances):
-            if inst["connected"]:
-                for ioc in misp.get_iocs(inst["id"]):
+        for i, ist in enumerate(instances):
+            status = misp.test_instance(ist["url"],
+                                        ist["apikey"],
+                                        ist["verifycert"])
+            if status:
+                for ioc in misp.get_iocs(ist["id"]):
                     iocs.add(ioc["type"], ioc["tag"], ioc["tlp"],
-                             ioc["value"], "misp-{}".format(inst["id"]))
-                misp.update_sync(inst["id"])
+                             ioc["value"], "misp-{}".format(ist["id"]))
+                misp.update_sync(ist["id"])
                 instances.pop(i)
         if instances: time.sleep(60)
 
