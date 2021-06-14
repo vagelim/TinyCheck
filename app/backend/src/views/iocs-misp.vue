@@ -20,7 +20,7 @@
                     <input class="form-input" type="text" ref="misp_key" placeholder="OqHSMyAuth3ntic4t10nK3y0MyAuth3ntic4t10nK3y3iiH" v-model="mispinst.key" required>
                     <label class="misp-label">Verify certificate? </label><span></span>
                     <div style="flex:50%"><label class="form-switch">
-                    <input type="checkbox" @change="switch_config('frontend', 'kiosk_mode')" v-model="mispinst.ssl">
+                    <input type="checkbox" v-model="mispinst.ssl">
                     <i class="form-icon"></i>
                     </label></div>
                 </div>
