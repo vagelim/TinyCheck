@@ -45,8 +45,8 @@ elif [ $PWD = "/tmp/tinycheck" ]; then
         sed -i 's/frontend:/frontend:\n  reboot_option: true/g' /usr/share/tinycheck/config.yaml
     fi
 
-    if ! grep -q user_lang /usr/share/tinycheck/config.yaml; then
-        sed -i 's/frontend:/frontend:\n  user_lang: en/g' /usr/share/tinycheck/config.yaml
+    if ! grep -q choose_net /usr/share/tinycheck/config.yaml; then
+        sed -i 's/frontend:/frontend:\n  choose_net: false/g' /usr/share/tinycheck/config.yaml
     fi
 
     if ! grep -q shutdown_option /usr/share/tinycheck/config.yaml; then
@@ -63,6 +63,10 @@ elif [ $PWD = "/tmp/tinycheck" ]; then
 
     if ! grep -q update /usr/share/tinycheck/config.yaml; then
         sed -i 's/frontend:/frontend:\n  update: true/g' /usr/share/tinycheck/config.yaml
+    fi
+
+    if ! grep -q user_lang /usr/share/tinycheck/config.yaml; then
+        sed -i 's/frontend:/frontend:\n  user_lang: en/g' /usr/share/tinycheck/config.yaml
     fi
 
     if ! grep -q "CN=R3,O=Let's Encrypt,C=US" /usr/share/tinycheck/config.yaml; then

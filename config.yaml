@@ -51,6 +51,7 @@ frontend:
   virtual_keyboard: true
   user_lang: userlang
   update: updateoption
+  choose_net: false
   
 # NETWORK -
 # Some elements related to the network configuration, such as

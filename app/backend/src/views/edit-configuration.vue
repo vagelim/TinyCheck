@@ -36,6 +36,10 @@
                     <i class="form-icon"></i> Use virtual keyboard (for touch screen)
                 </label>
                 <label class="form-switch">
+                    <input type="checkbox" @change="switch_config('frontend', 'choose_net')" v-model="config.frontend.choose_net">
+                    <i class="form-icon"></i> Allow the end-user to choose the network even if connected.
+                </label>
+                <label class="form-switch">
                     <input type="checkbox" @change="switch_config('frontend', 'reboot_option')" v-model="config.frontend.reboot_option">
                     <i class="form-icon"></i> Allow the end-user to reboot the device from the interface.
                 </label>

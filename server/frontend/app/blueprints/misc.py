@@ -72,5 +72,6 @@ def get_config():
         "shutdown_option": read_config(("frontend", "shutdown_option")),
         "reboot_option": read_config(("frontend", "reboot_option")),
         "iface_out": read_config(("network", "out")),
-        "user_lang": read_config(("frontend", "user_lang"))
+        "user_lang": read_config(("frontend", "user_lang")),
+        "choose_net": read_config(("frontend", "choose_net"))
     })
