@@ -52,6 +52,9 @@
     "report_of": "Rapport de",
     "ip_address": "Adresse IP :",
     "mac_address": "Adresse MAC :",
+    "pcap_sha1": "SHA1 :",
+    "capture_started": "Capture débutée le :",
+    "capture_ended": "Capture finie le :",
     "high": "elevee",
     "moderate": "moyenne",
     "low": "basse"

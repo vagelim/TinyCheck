@@ -50,8 +50,11 @@
         "low_msg": "Solo tiene {nb} alertas bajas, <br /> por favor revíselas",
         "save_report": "Guardar el informe",
         "report_of": "Informe de",
-        "ip_address": "dirección IP",
-        "mac_address": "dirección MAC",
+        "ip_address": "Dirección IP:",
+        "mac_address": "Dirección MAC:",
+        "pcap_sha1": "SHA1:",
+        "capture_started": "Captura comenzó a:",
+        "capture_ended": "Captura terminó a:",
         "high": "alta",
         "moderate": "moderada",
         "low": "bajo"

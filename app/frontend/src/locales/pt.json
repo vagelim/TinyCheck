@@ -50,8 +50,11 @@
     "low_msg": "Você tem apenas {nb} alertas leves,<br /> não deixe de verificá-los.",
     "save_report": "Salvar o relatório",
     "report_of": "Relatório de",
-    "ip_address": "Endereço IP",
-    "mac_address": "Endereço MAC",
+    "ip_address": "Endereço IP:",
+    "mac_address": "Endereço MAC:",
+    "pcap_sha1": "SHA1:",
+    "capture_started": "Captura iniciada em:",
+    "capture_ended": "Captura terminou em:",
     "high": "crítico",
     "moderate": "moderado",
     "low": "leve"

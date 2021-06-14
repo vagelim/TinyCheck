@@ -50,8 +50,11 @@
     "low_msg": "Sie haben nur {nb} Warnungen der Stufe \"Niedrig\":<br> Überprüfen Sie sie gerne.",
     "save_report": "Bericht speichern",
     "report_of": "Bericht zu",
-    "ip_address": "IP-Adresse",
-    "mac_address": "MAC-Adresse",
+    "ip_address": "IP-Adresse:",
+    "mac_address": "MAC-Adresse:",
+    "pcap_sha1": "SHA1:",
+    "capture_started": "Capture begann mit:",
+    "capture_ended": "Capture endete an:",
     "high": "Hoch",
     "moderate": "Mittel",
     "low": "Niedrig"

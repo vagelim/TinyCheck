@@ -54,7 +54,8 @@ export default {
                         this.running = false;
                         router.replace({ name: 'report', 
                                          params: { alerts : response.data.alerts, 
-                                                   device : response.data.device,  
+                                                   device : response.data.device, 
+                                                   pcap : response.data.pcap,  
                                                    capture_token : this.capture_token } });
                     }
                 })
