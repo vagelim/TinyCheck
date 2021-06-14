@@ -35,6 +35,12 @@ const routes = [
     props: true
   },
   {
+    path: '/iocs/misp',
+    name: 'iocs-manage',
+    component: () => import('../views/iocs-misp.vue'),
+    props: true
+  },
+  {
     path: '/iocs/search',
     name: 'iocs-search',
     component: () => import('../views/iocs-search.vue'),

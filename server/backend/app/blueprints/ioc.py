@@ -26,6 +26,20 @@ def add(ioc_type, ioc_tag, ioc_tlp, ioc_value):
     return jsonify(res)
 
 
+@ioc_bp.route('/add_post', methods=['POST'])
+@require_header_token
+def add_post():
+    """
+        Parse and add an IOC to the database using the post method.
+        :return: status of the operation in JSON
+    """
+
+    data = json.loads(request.data)
+    ioc = data["data"]["ioc"]
+    res = IOCs.add(ioc["ioc_type"], ioc["ioc_tag"], ioc["ioc_tlp"], ioc["ioc_value"], ioc["ioc_source"])
+    return jsonify(res)
+
+
 @ioc_bp.route('/delete/<ioc_id>', methods=['GET'])
 @require_header_token
 def delete(ioc_id):

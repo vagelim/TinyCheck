@@ -13,27 +13,37 @@
                     <thead>
                         <tr>
                             <th>Indicator</th>
-                            <th>Type</th>
                             <th>Tag</th>
                             <th>TLP</th>
-                            <th> </th>
+                            <th>Source</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="r in results" :key="r.tlp">
                             <td>{{ r.value }}</td>
-                            <td class="capi">{{ r.type }}</td>
                             <td class="upper">{{ r.tag }}</td>
                             <td><label :class="['tlp-' + r.tlp]">{{ r.tlp }}</label></td>
+                            <td class="capi">{{ r.source }}</td>
                             <td><button class="btn btn-sm" v-on:click="remove(r)">Delete</button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div v-else-if="first_search==false">
-                <div class="empty">
-                    <p class="empty-title h5">IOC<span v-if="this.iocs.match(/[^\r\n]+/g).length>1">s</span> not found.</p>
-                    <p class="empty-subtitle">Try wildcard search to expend your search.</p>
+                <div v-if="loading">
+                    <div class="empty">
+                        <p class="empty-title h5">
+                            <span class="loading loading-lg"></span>
+                        </p>
+                        <p class="empty-subtitle">Finding your IOC(s)...</p>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="empty">
+                        <p class="empty-title h5">IOC<span v-if="this.iocs.match(/[^\r\n]+/g).length>1">s</span> not found.</p>
+                        <p class="empty-subtitle">Try wildcard search to expend your search.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -49,7 +59,8 @@ export default {
         return { 
             results: [],
             first_search: true,
-            jwt:""
+            jwt:"",
+            loading:false
         }
     },
     props: { },
@@ -57,6 +68,7 @@ export default {
         search_iocs: function() {
             this.results = []
             this.first_search = false
+            this.loading = true;
             this.iocs.match(/[^\r\n]+/g).forEach(ioc => {
                 ioc = ioc.trim()
                 if("alert " != ioc.slice(0,6)) {
@@ -72,6 +84,7 @@ export default {
                     if(response.data.results.length>0){
                         this.results = [].concat(this.results, response.data.results);
                     }
+                    this.loading = false;
                 })
                 .catch(err => (console.log(err)))
             });

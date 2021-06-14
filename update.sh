@@ -40,6 +40,10 @@ elif [ $PWD = "/tmp/tinycheck" ]; then
     cd /usr/share/tinycheck/app/frontend/ && npm install && npm audit fix && npm run build
     cd /usr/share/tinycheck/app/backend/ && npm install && npm audit fix && npm run build
 
+    echo "[+] Updating the database scheme..."
+    cd /usr/share/tinycheck/
+    sqlite3 tinycheck.sqlite3 < /tmp/tinycheck/assets/scheme.sql 2>/dev/null
+
     echo "[+] Updating current configuration with new values."
     if ! grep -q reboot_option /usr/share/tinycheck/config.yaml; then
         sed -i 's/frontend:/frontend:\n  reboot_option: true/g' /usr/share/tinycheck/config.yaml

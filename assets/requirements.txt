@@ -2,6 +2,7 @@ ipwhois
 M2Crypto
 pyOpenSSL
 pydig
+pymisp
 netaddr
 pyyaml
 flask
