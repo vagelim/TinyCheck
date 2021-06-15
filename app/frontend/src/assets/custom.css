@@ -128,8 +128,8 @@
     }
 
     .report-wrapper {
-        width:90%;
         margin:auto;
+        padding-bottom:1px;
     }
 
     .device-ctx {
@@ -212,10 +212,11 @@
     .report-wrapper {
         width:60%;
         margin:auto;
+        padding-bottom: 1px;
     }
 
     .device-ctx {
-        padding:15px;
+        padding:15px 0px 15px 0px;
         margin:auto;
     }
 
@@ -301,6 +302,17 @@ footer {
 
 .container-padding-right {
     padding-left:40px;
+}
+
+    
+.device-ctx-legend {
+    font-size: 14px;
+    color: #a6a6a6;
+    margin-top: 10px;
+    padding-top: 10px;
+    background-color: #fbfbfb;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .group-title {

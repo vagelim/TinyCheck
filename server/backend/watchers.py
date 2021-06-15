@@ -4,6 +4,7 @@
 from app.utils import read_config
 from app.classes.iocs import IOCs
 from app.classes.whitelist import WhiteList
+from app.classes.misp import MISP
 
 import requests
 import json
@@ -16,11 +17,6 @@ from multiprocessing import Process
     in the configuration file. This in order to get
     automatically new iocs / elements from remote
     sources without user interaction.
-
-    As of today the default export JSON format from
-    the backend and unauthenticated HTTP requests
-    are accepted. The code is little awkward, it'll
-    be better in a next version ;)
 """
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -29,7 +25,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 def watch_iocs():
     """
         Retrieve IOCs from the remote URLs defined in config/watchers.
-        For each (new ?) IOC, add it to the DB.
+        For each IOC, add it to the DB.
     """
 
     # Retrieve the URLs from the configuration
@@ -120,8 +116,32 @@ def watch_whitelists():
             break
 
 
+def watch_misp():
+    """
+        Retrieve IOCs from misp instances. Each new element is
+        tested and then added to the database.
+    """
+    iocs, misp = IOCs(), MISP()
+    instances = [i for i in misp.get_instances()]
+
+    while instances:
+        for i, ist in enumerate(instances):
+            status = misp.test_instance(ist["url"],
+                                        ist["apikey"],
+                                        ist["verifycert"])
+            if status:
+                for ioc in misp.get_iocs(ist["id"]):
+                    iocs.add(ioc["type"], ioc["tag"], ioc["tlp"],
+                             ioc["value"], "misp-{}".format(ist["id"]))
+                misp.update_sync(ist["id"])
+                instances.pop(i)
+        if instances: time.sleep(60)
+
+
 p1 = Process(target=watch_iocs)
 p2 = Process(target=watch_whitelists)
+p3 = Process(target=watch_misp)
 
 p1.start()
 p2.start()
+p3.start()

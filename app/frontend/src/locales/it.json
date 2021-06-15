@@ -50,8 +50,11 @@
     "low_msg": "Sono presenti solo {nb} avvisi con priorità bassa<br /> da controllare.",
     "save_report": "Salva il rapporto",
     "report_of": "Rapporto di",
-    "ip_address": "Indirizzo IP",
-    "mac_address": "Indirizzo MAC",
+    "ip_address": "Indirizzo IP:",
+    "mac_address": "Indirizzo MAC:",
+    "pcap_sha1": "SHA1:",
+    "capture_started": "Cattura è iniziata su:",
+    "capture_ended": "Cattura terminata su:",
     "high": "elevata",
     "moderate": "moderata",
     "low": "bassa"

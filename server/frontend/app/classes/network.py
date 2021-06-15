@@ -4,6 +4,7 @@
 import subprocess as sp
 import netifaces as ni
 import requests as rq
+import re
 import sys
 import time
 import qrcode
@@ -214,11 +215,13 @@ class Network(object):
             :return: bool - if hostapd configuration file created
         """
         try:
+            chan = self.set_ap_channel()
             with open("{}/app/assets/hostapd.conf".format(sys.path[0]), "r") as f:
                 conf = f.read()
                 conf = conf.replace("{IFACE}", self.iface_in)
                 conf = conf.replace("{SSID}", self.AP_SSID)
                 conf = conf.replace("{PASS}", self.AP_PASS)
+                conf = conf.replace("{CHAN}", chan)
                 with open("/tmp/hostapd.conf", "w") as c:
                     c.write(conf)
             return True
@@ -335,3 +338,18 @@ class Network(object):
             return True
         except:
             return False
+
+    def set_ap_channel(self):
+        """
+            Deduce the channel to have for the AP in order to prevent
+            kind of jamming between the two wifi interfaces.
+        """
+
+        # Get the channel of the connected interface
+        sh = sp.Popen(["iw", self.iface_out, "info"],
+                      stdout=sp.PIPE, stderr=sp.PIPE).communicate()
+        res = re.search("channel ([0-9]{1,2})", sh[0].decode('utf8'))
+        chn = res.group(1)
+
+        # Return a good candidate.
+        return "11" if int(chn) < 7 else "1"

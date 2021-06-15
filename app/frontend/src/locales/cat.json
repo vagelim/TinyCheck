@@ -50,8 +50,11 @@
         "low_msg": "Només teniu {nb} alertes baixes, <br /> Si us plau comproveu-les.",
         "save_report": "Desa l'informe",
         "report_of": "Informe de",
-        "ip_address": "Adreça IP",
-        "mac_address": "Adreça MAC",
+        "ip_address": "Adreça IP:",
+        "mac_address": "Adreça MAC:",
+        "pcap_sha1": "SHA1:",
+        "capture_started": "La captura va començar a:",
+        "capture_ended": "La captura va acabar el:",
         "high": "alt",
         "moderat": "moderat",
         "low": "baix"

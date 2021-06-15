@@ -50,8 +50,11 @@
     "low_msg": "You have only {nb} low alerts,<br /> don't hesitate to check them.",
     "save_report": "Save the report",
     "report_of": "Report of",
-    "ip_address": "IP address",
-    "mac_address": "MAC address",
+    "ip_address": "IP address:",
+    "mac_address": "MAC address:",
+    "pcap_sha1": "SHA1:",
+    "capture_started": "Capture started on:",
+    "capture_ended": "Capture ended on:",
     "high": "high",
     "moderate": "moderate",
     "low": "low"

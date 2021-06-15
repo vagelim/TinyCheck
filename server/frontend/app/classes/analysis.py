@@ -41,12 +41,17 @@ class Analysis(object):
             :return: dict containing the report or error message.
         """
 
-        device, alerts = {}, {}
+        device, alerts, pcap = {}, {}, {}
 
         # Getting device configuration.
         if os.path.isfile("/tmp/{}/assets/device.json".format(self.token)):
             with open("/tmp/{}/assets/device.json".format(self.token), "r") as f:
                 device = json.load(f)
+
+        # Getting pcap infos.
+        if os.path.isfile("/tmp/{}/assets/capinfos.json".format(self.token)):
+            with open("/tmp/{}/assets/capinfos.json".format(self.token), "r") as f:
+                pcap = json.load(f)
 
         # Getting alerts configuration.
         if os.path.isfile("/tmp/{}/assets/alerts.json".format(self.token)):
@@ -55,6 +60,7 @@ class Analysis(object):
 
         if device != {} and alerts != {}:
             return {"alerts": alerts,
-                    "device": device}
+                    "device": device,
+                    "pcap": pcap}
         else:
             return {"message": "No report yet"}

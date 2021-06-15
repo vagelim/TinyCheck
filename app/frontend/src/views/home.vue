@@ -24,6 +24,8 @@ export default {
             var internet = this.internet
             if (window.config.iface_out.charAt(0) == 'e'){
                 router.push({ name: 'generate-ap' });
+            } else if (!window.config.choose_net && this.internet){
+                router.push({ name: 'generate-ap' });
             } else {
                 router.push({ name: 'wifi-select', 
                               params: { saved_ssid: saved_ssid, 

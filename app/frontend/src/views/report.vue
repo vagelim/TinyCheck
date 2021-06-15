@@ -46,8 +46,14 @@
         </div>
         <div v-else-if="show_report" class="report-wrapper">
             <div class="device-ctx">
-                <h3 style="margin: 0;">{{ $t("report.report_of") }} {{device.name}}</h3>
-                {{ $t("report.ip_address") }} {{device.ip_address}}<br />{{ $t("report.mac_address") }} {{device.mac_address}}
+                <h3 style="margin: 0; padding-left:10px;">{{ $t("report.report_of") }} {{device.name}}</h3>
+                <div class="device-ctx-legend">
+                    {{ $t("report.pcap_sha1") }} {{ pcap.SHA1 }}<br />
+                    {{ $t("report.capture_started") }} {{ pcap["First packet time"].split(",")[0] }}<br />
+                    {{ $t("report.capture_ended") }} {{ pcap["Last packet time"].split(",")[0] }}<br />
+                    <!-- {{ $t("report.ip_address") }} {{device.ip_address}}<br /> -->
+                    {{ $t("report.mac_address") }} {{device.mac_address}}
+                </div>
             </div>
             <ul class="alerts">
                 <li class="alert" v-for="alert in alerts.high" :key="alert.message">
@@ -105,6 +111,7 @@ export default {
     },
     props: {
         device: Object,
+        pcap: Object,
         alerts: Array,
         capture_token: String
     },

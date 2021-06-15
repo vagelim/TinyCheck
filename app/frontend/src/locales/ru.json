@@ -50,8 +50,11 @@
     "low_msg": "У вас {nb} предупреждение низкого уровня<br />, проверьте их.",
     "save_report": "Сохранить отчет",
     "report_of": "Отчет",
-    "ip_address": "IP-адрес",
-    "mac_address": "MAC-адрес",
+    "ip_address": "IP-адрес:",
+    "mac_address": "MAC-адрес:",
+    "pcap_sha1": " SHA1:",
+    "capture_started": "Захват начался:",
+    "capture_ended": "захват закончился:",
     "high": "высокий",
     "moderate": "средний",
     "low": "низкий"
