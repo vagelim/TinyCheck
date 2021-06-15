@@ -344,12 +344,14 @@ class Network(object):
             Deduce the channel to have for the AP in order to prevent
             kind of jamming between the two wifi interfaces.
         """
+        if self.iface_out[0] == "w":
+            # Get the channel of the connected interface
+            sh = sp.Popen(["iw", self.iface_out, "info"],
+                          stdout=sp.PIPE, stderr=sp.PIPE).communicate()
+            res = re.search("channel ([0-9]{1,2})", sh[0].decode('utf8'))
+            chn = res.group(1)
 
-        # Get the channel of the connected interface
-        sh = sp.Popen(["iw", self.iface_out, "info"],
-                      stdout=sp.PIPE, stderr=sp.PIPE).communicate()
-        res = re.search("channel ([0-9]{1,2})", sh[0].decode('utf8'))
-        chn = res.group(1)
-
-        # Return a good candidate.
-        return "11" if int(chn) < 7 else "1"
+            # Return a good candidate.
+            return "11" if int(chn) < 7 else "1"
+        else:
+            return "1"
