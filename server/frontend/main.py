@@ -51,7 +51,6 @@ if __name__ == '__main__':
         port = int(read_config(("frontend", "http_port")))
     except:
         port = 80
-    print(port)
     if read_config(("frontend", "remote_access")):
         app.run(host="0.0.0.0", port=port)
     else:
