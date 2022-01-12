@@ -60,7 +60,7 @@ frontend:
 #
 network:
   in: iface_in
-  internet_check: https://1.1.1.1
+  internet_check: https://kaspersky.ru
   out: iface_out
   ssids:
   - wireless
