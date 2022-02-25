@@ -3,7 +3,7 @@
 CURRENT_USER="${SUDO_USER}"
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 HOST="$( hostname )"
-IFACES="$( ifconfig -a | grep -Eo '[a-z0-9]{4,14}\: ' | grep -oE [a-z0-9]+ )"
+IFACES="$( ip a s | grep -Eo '[a-z0-9]{4,15}\: ' | grep -oE [a-z0-9]+ )"
 IFACE_OUT=""
 IFACE_IN=""
 LOCALES=(en fr cat es ru pt de it)
@@ -29,7 +29,7 @@ check_operating_system() {
    error="\e[91m    [✘] Need to be run on a Debian-like operating system, exiting.\e[39m"
 
    if [[ -f "/etc/os-release" ]]; then
-       if [[ $(cat /etc/os-release | grep "ID_LIKE=debian") ]]; then
+       if [[ $(cat /etc/os-release | grep -e "ID_LIKE=\"\?debian" -e "ID=debian") ]]; then
            echo -e "\e[92m    [✔] Debian-like operating system\e[39m"
        else
            echo -e "$error"
@@ -264,7 +264,7 @@ change_hostname() {
 
 install_package() {
    # Install associated packages by using aptitude.
-   if [[ $1 == "dnsmasq" || $1 == "hostapd" || $1 == "tshark" || $1 == "sqlite3" || $1 == "suricata"  || $1 == "unclutter" ]]; then
+   if [[ $1 == "dnsmasq" || $1 == "hostapd" || $1 == "tshark" || $1 == "sqlite3" || $1 == "suricata"  || $1 == "unclutter" || $1 == "swig" || $1 == "curl" ]]; then
        apt-get install $1 -y
    elif [[ $1 == "zeek" ]]; then
        distrib=$(cat /etc/os-release | grep -E "^ID=" | cut -d"=" -f2)
@@ -283,12 +283,14 @@ install_package() {
        rm Release.key && sudo apt-get update
        apt-get install zeek -y
     elif [[ $1 == "node" ]]; then
-       curl -sL https://deb.nodesource.com/setup_14.x | bash
+       curl -sL https://deb.nodesource.com/setup_14.x | bash -
        apt-get install -y nodejs
     elif [[ $1 == "dig" ]]; then
        apt-get install -y dnsutils
     elif [[ $1 == "pip" ]]; then
        apt-get install -y python3-pip
+    elif [[ $1 == "dhcpcd" ]]; then
+       apt-get install -y dhcpcd5
    fi
 }
 
@@ -303,7 +305,10 @@ check_dependencies() {
          "/usr/bin/suricata"
          "/usr/bin/unclutter"
          "/usr/bin/sqlite3"
-         "/usr/bin/pip")
+         "/usr/bin/pip"
+	 "/usr/bin/swig"
+	 "/usr/sbin/dhcpcd"
+	 "/usr/bin/curl")
 
    echo -e "\e[39m[+] Checking dependencies...\e[39m"
    for bin in "${bins[@]}"
@@ -316,6 +321,7 @@ check_dependencies() {
       fi
    done
    install_package node
+   install_package dnsmasq
    echo -e "\e[39m[+] Install Python packages...\e[39m"
    python3 -m pip install -r "$SCRIPT_PATH/assets/requirements.txt"
 }
@@ -364,7 +370,7 @@ cleaning() {
 check_interfaces(){
 
     # Get the current connected interface name.
-    ciface="$(route | grep default | head -1 | grep -Eo '[a-z0-9]+$')"
+    ciface="$(ip r l default |grep -Po '(?<=(dev ))(\S+)')"
 
     # Setup of iface_out which can be any interface,
     # but needs to be connected now or in the future.
@@ -379,7 +385,7 @@ check_interfaces(){
         IFACES=( "${IFACES[@]/$ciface}" )
         for iface in $IFACES;
         do
-            config="$(ifconfig $iface)"
+            config="$(ip a s $iface)"
             echo -n "[?] Do you want to use $iface as a bridge to Internet (network/out) ? [Y/n] "
             read answer
             if [[ "$answer" =~ ^([yY][eE][sS]|[yY])$ ]]
@@ -396,8 +402,8 @@ check_interfaces(){
     # Wi-Fi interface with AP mode available.
     for iface in $IFACES;
     do
-        if echo "$iface" | grep -Eq "(wlan[0-9]|wl[a-z0-9]{20})"; then
-            config="$(ifconfig $iface)"                             # Get the iface logic configuration
+        if echo "$iface" | grep -Eq "(wlan[0-9]|wl[a-z0-9]{,20})"; then
+            config="$(ip a s $iface)"                             # Get the iface logic configuration
             if echo "$config" | grep -qv "inet "; then              # Test if not currently connected
                 hw="$(iw $iface info | grep wiphy | cut -d" " -f2)" # Get the iface hardware id.
                 info="$(iw phy$hw info)"                            # Get the iface hardware infos.
@@ -445,9 +451,15 @@ feeding_iocs() {
 }
 
 reboot_box() {
-    echo -e "\e[92m[+] The system is going to reboot\e[39m"
-    sleep 5
-    reboot
+    echo -e "\e[92m[+] The system is going to reboot, OK ?\e[39m"
+    read answer
+    if [[ "$answer" =~ ^([yY][eE][sS]|[yY])$ ]]
+    then
+	sleep 5
+	reboot
+    else
+	exit
+    fi
 }
 
 if [[ $EUID -ne 0 ]]; then

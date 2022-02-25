@@ -239,7 +239,7 @@ class Network(object):
         # Kill potential zombies of hostapd
         terminate_process("hostapd")
 
-        sp.Popen(["ifconfig", self.iface_in, "up"]).wait()
+        sp.Popen(["ip","link","set", self.iface_in, "up"]).wait()
         sp.Popen(
             "/usr/sbin/hostapd /tmp/hostapd.conf > /tmp/hostapd.log", shell=True)
 
@@ -314,15 +314,15 @@ class Network(object):
             This enable interfaces, with a simple check. 
             :return: bool if everything goes well 
         """
-        sh = sp.Popen(["ifconfig", iface],
+        sh = sp.Popen(["ip" ,"a","s", iface],
                       stdout=sp.PIPE, stderr=sp.PIPE)
         sh = sh.communicate()
-        if b"<UP," in sh[0]:
+        if b",UP" in sh[0]:
             return True  # The interface is up.
         elif sh[1]:
             return False  # The interface doesn't exists (most of the cases).
         else:
-            sp.Popen(["ifconfig", iface, "up"]).wait()
+            sp.Popen(["ip","link","set", iface, "up"]).wait()
             return True
 
     def check_internet(self):
