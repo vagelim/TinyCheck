@@ -294,11 +294,25 @@ install_package() {
    fi
 }
 
+check_dnsmasq() {
+   readlink /etc/resolv.conf
+   status=$?
+   if [[ $status -eq 0 && -f "/usr/sbin/dnsmasq" ]]; then
+      systemctl disable systemd-resolved
+      systemctl stop systemd-resolved
+      unlink /etc/resolv.conf
+      echo "nameserver 8.8.8.8" | tee /etc/resolv.conf
+      install_package dnsmasq
+   else
+      install_package dnsmasq
+   fi
+}
+
 check_dependencies() {
    # Check binary dependencies associated to the project.
    # If not installed, call install_package with the package name.
+   check_dnsmasq
    bins=("/usr/sbin/hostapd"
-         "/usr/sbin/dnsmasq"
          "/opt/zeek/bin/zeek"
          "/usr/bin/tshark"
          "/usr/bin/dig"
@@ -321,7 +335,6 @@ check_dependencies() {
       fi
    done
    install_package node
-   install_package dnsmasq
    echo -e "\e[39m[+] Install Python packages...\e[39m"
    python3 -m pip install -r "$SCRIPT_PATH/assets/requirements.txt"
 }
