@@ -269,7 +269,7 @@ install_package() {
    elif [[ $1 == "zeek" ]]; then
        distrib=$(cat /etc/os-release | grep -E "^ID=" | cut -d"=" -f2)
        version=$(cat /etc/os-release | grep "VERSION_ID" | cut -d"\"" -f2)
-       if [[ $distrib == "debian" || $distrib == "ubuntu" ]]; then
+       if [[ $distrib == "debian" ]]; then
          echo "deb http://download.opensuse.org/repositories/security:/zeek/Debian_$version/ /" > /etc/apt/sources.list.d/security:zeek.list
          wget -nv "https://download.opensuse.org/repositories/security:zeek/Debian_$version/Release.key" -O Release.key
        elif [[ $distrib == "ubuntu" ]]; then
