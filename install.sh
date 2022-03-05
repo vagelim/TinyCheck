@@ -264,8 +264,11 @@ change_hostname() {
 
 install_package() {
    # Install associated packages by using aptitude.
-   if [[ $1 == "dnsmasq" || $1 == "hostapd" || $1 == "tshark" || $1 == "sqlite3" || $1 == "suricata"  || $1 == "unclutter" || $1 == "swig" || $1 == "curl" ]]; then
+   if [[ $1 == "dnsmasq" || $1 == "hostapd" || $1 == "tshark" || $1 == "sqlite3" || $1 == "unclutter" || $1 == "swig" || $1 == "curl" ]]; then
        apt-get install $1 -y
+   elif [[ $1 == "suricata" ]];then 
+       add-apt-repository ppa:oisf/suricata-stable
+       apt-get install suricata -y
    elif [[ $1 == "zeek" ]]; then
        distrib=$(cat /etc/os-release | grep -E "^ID=" | cut -d"=" -f2)
        version=$(cat /etc/os-release | grep "VERSION_ID" | cut -d"\"" -f2)
