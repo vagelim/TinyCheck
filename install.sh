@@ -264,7 +264,7 @@ change_hostname() {
 
 install_package() {
    # Install associated packages by using aptitude.
-   if [[ $1 == "dnsmasq" || $1 == "hostapd" || $1 == "tshark" || $1 == "sqlite3" || $1 == "suricata"  || $1 == "unclutter" ]]; then
+   if [[ $1 == "dnsmasq" || $1 == "hostapd" || $1 == "tshark" || $1 == "sqlite3" || $1 == "suricata" || $1 == "unclutter" || $1 == "iptables" ]]; then
        apt-get install $1 -y
    elif [[ $1 == "zeek" ]]; then
        distrib=$(cat /etc/os-release | grep -E "^ID=" | cut -d"=" -f2)
@@ -303,7 +303,8 @@ check_dependencies() {
          "/usr/bin/suricata"
          "/usr/bin/unclutter"
          "/usr/bin/sqlite3"
-         "/usr/bin/pip")
+         "/usr/bin/pip"
+         "/usr/sbin/iptables")
 
    echo -e "\e[39m[+] Checking dependencies...\e[39m"
    for bin in "${bins[@]}"
