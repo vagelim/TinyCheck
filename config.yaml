@@ -52,6 +52,7 @@ frontend:
   user_lang: userlang
   update: updateoption
   choose_net: false
+  http_port: 80
 
 # NETWORK -
 # Some elements related to the network configuration, such as
