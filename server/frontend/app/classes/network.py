@@ -298,13 +298,22 @@ class Network(object):
                      shell=True).wait()
 
             # Enable forwarding.
-            sp.Popen(["iptables", "-A", "POSTROUTING", "-t", "nat", "-o",
-                      self.iface_out, "-j", "MASQUERADE"]).wait()
+            
+            sp.Popen("nft add table nat",shell=True).wait()
+            sp.Popen("nft 'add chain nat prerouting { type nat hook prerouting priority 100; }'",shell=True).wait()
+            sp.Popen("nft 'add chain nat postrouting { type nat hook postrouting priority 100; }'",shell=True).wait()
+            sp.Popen("nft add table ip filter",shell=True).wait()
+            sp.Popen("nft 'add chain ip filter INPUT { type filter hook input priority 0; }'",shell=True).wait()
+            
+            
+            sp.Popen(["nft","add","rule","ip","nat","postrouting","oifname",
+                       self.iface_out,"counter","masquerade"]).wait()
 
             # Prevent the device to reach the 80 and 443 of TinyCheck.
-            sp.Popen(["iptables", "-A", "INPUT", "-i", self.iface_in, "-d",
-                      "192.168.100.1", "-p", "tcp", "--match", "multiport", "--dports", "80,443", "-j" "DROP"]).wait()
-
+            sp.Popen(["nft","add","rule","ip","filter","INPUT","iifname",self.iface_in,"ip",
+                      "protocol","tcp","ip","daddr","192.168.100.1","tcp","dport","{ 80,443}","counter","drop"]).wait()
+            
+            
             return True
         except:
             return False
