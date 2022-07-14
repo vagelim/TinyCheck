@@ -15,6 +15,6 @@ export const i18n = new VueI18n({
     'pt': require('@/locales/pt.json'),
     'it': require('@/locales/it.json'),
     'de': require('@/locales/de.json'),
-    'sk': require('@/locales/sk.json'),
+    'sk': require('@/locales/sk.json')
   }
 })
