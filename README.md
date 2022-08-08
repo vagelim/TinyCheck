@@ -24,17 +24,17 @@ TinyCheck can be used in several ways by individuals and entities:
 
 ### Installation
 
-Please check the few steps in the [Wiki's Installation Page](https://github.com/KasperskyLab/TinyCheck/wiki/TinyCheck-installation). 
+Please check the few steps in the [Wiki's Installation Page](https://github.com/KasperskyLab/TinyCheck/wiki/TinyCheck-installation).
 
 ### Meet the frontend
 
-The frontend - which can be accessed from `http://tinycheck.local` is a kind of tunnel which help the user throughout the process of network capture and reporting. It allows the user to setup a Wi-Fi connection to an existing Wi-Fi network, create an ephemeral Wi-Fi network, capture the communications and show a report to the user... in less than one minute, 5 clicks and without any technical knowledge. 
+The frontend - which can be accessed from `http://tinycheck.local` is a kind of tunnel which help the user throughout the process of network capture and reporting. It allows the user to setup a Wi-Fi connection to an existing Wi-Fi network, create an ephemeral Wi-Fi network, capture the communications and show a report to the user... in less than one minute, 5 clicks and without any technical knowledge.
 
 ![Frontend](/assets/frontend.png)
 
 ### Meet the backend
 
-Once installed, you can connect yourself to the TinyCheck backend by browsing the URL `https://tinycheck.local` and accepting the SSL self-signed certificate. 
+Once installed, you can connect yourself to the TinyCheck backend by browsing the URL `https://tinycheck.local` and accepting the SSL self-signed certificate.
 
 ![Backend](/assets/backend.png)
 
@@ -42,9 +42,9 @@ The backend allows you to edit the configuration of TinyCheck, add extended IOCs
 
 ### Special thanks
 
-**Guys who provided some IOCs**
+**People who provided some IOCs**
 - [Cian Heasley](https://twitter.com/nscrutables) for his android stalkerwares IOC repo, available here: https://github.com/diskurse/android-stalkerware
-- [Te-k](https://twitter.com/tenacioustek) for his stalkerwares awesome IOCs repo, available here: https://github.com/Te-k/stalkerware-indicators
+- [Echap](https://github.com/AssoEchap) for their stalkerwares awesome IOCs repo, available here: https://github.com/AssoEchap/stalkerwarestalker
 - [Emilien](https://twitter.com/__Emilien__) for his Stratum rules, available here: https://github.com/kwouffe/cryptonote-hunt
 - [Costin Raiu](https://twitter.com/craiu) for his geo-tracker domains, available here: https://github.com/craiu/mobiletrackers/blob/master/list.txt
 
