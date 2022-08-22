@@ -44,7 +44,7 @@ The backend allows you to edit the configuration of TinyCheck, add extended IOCs
 
 **People who provided some IOCs**
 - [Cian Heasley](https://twitter.com/nscrutables) for his android stalkerwares IOC repo, available here: https://github.com/diskurse/android-stalkerware
-- [Echap](https://github.com/AssoEchap) for their stalkerwares awesome IOCs repo, available here: https://github.com/AssoEchap/stalkerwarestalker
+- [Echap](https://github.com/AssoEchap) for their stalkerwares awesome IOCs repo, available here: https://github.com/AssoEchap/stalkerware-indicators
 - [Emilien](https://twitter.com/__Emilien__) for his Stratum rules, available here: https://github.com/kwouffe/cryptonote-hunt
 - [Costin Raiu](https://twitter.com/craiu) for his geo-tracker domains, available here: https://github.com/craiu/mobiletrackers/blob/master/list.txt
 
