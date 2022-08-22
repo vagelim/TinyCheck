@@ -61,7 +61,7 @@ frontend:
 #
 network:
   in: iface_in
-  internet_check: https://1.1.1.1
+  internet_check: https://8.8.8.8
   out: iface_out
   ssids:
   - wireless
