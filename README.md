@@ -42,6 +42,8 @@ The backend allows you to edit the configuration of TinyCheck, add extended IOCs
 
 ### Special thanks
 
+**Felix Aime**, for his idea and passion while developing and testing this project. Felix is a main contributor and we really appreciate his work on TinyCheck.
+
 **People who provided some IOCs**
 - [Cian Heasley](https://twitter.com/nscrutables) for his android stalkerwares IOC repo, available here: https://github.com/diskurse/android-stalkerware
 - [Echap](https://github.com/AssoEchap) for their stalkerwares awesome IOCs repo, available here: https://github.com/AssoEchap/stalkerware-indicators
